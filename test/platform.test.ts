@@ -75,6 +75,8 @@ describe('platform with a simulated RIVER 3 Plus', () => {
 
     // The simulator starts at 76%, charging on mains, AC on, 12 V off.
     assert.equal(found.battery!.getCharacteristic(Characteristic.BatteryLevel).value, 76);
+    assert.equal(found.battery!.characteristics.find((c) => c.displayName === 'Battery Health')?.value, 100);
+    assert.equal(found.battery!.characteristics.find((c) => c.displayName === 'Battery Cycles')?.value, 1);
     assert.equal(found['battery-temperature']!.getCharacteristic(Characteristic.CurrentTemperature).value, 27);
     assert.equal(
       found.battery!.getCharacteristic(Characteristic.ChargingState).value,

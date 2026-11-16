@@ -6,6 +6,8 @@ import { KNOWN_SERIAL_PREFIXES, type DeviceConfig } from './settings.js';
 
 /** Eve's "Consumption" characteristic, so apps such as Eve and Controller can show watts. */
 const EVE_CONSUMPTION_UUID = 'E863F10D-079E-48FF-8F27-9C2605A29F52';
+const BATTERY_HEALTH_UUID = 'C7A5B4D1-7C5E-4F7A-9E31-7E6B1B7A0001';
+const BATTERY_CYCLES_UUID = 'C7A5B4D1-7C5E-4F7A-9E31-7E6B1B7A0002';
 
 type ServiceType = WithUUID<typeof Service>;
 
@@ -20,6 +22,8 @@ export class River3Accessory {
   private readonly mains?: Service;
   private readonly acWatts?: Characteristic;
   private readonly dcWatts?: Characteristic;
+  private readonly batteryHealth?: Characteristic;
+  private readonly batteryCycles?: Characteristic;
 
   constructor(
     private readonly platform: River3Platform,
@@ -43,6 +47,10 @@ export class River3Accessory {
     this.battery
       .getCharacteristic(Characteristic.StatusLowBattery)
       .onGet(() => this.read(() => this.lowBattery()));
+    this.batteryHealth = this.customBatteryCharacteristic('Battery Health', BATTERY_HEALTH_UUID, 0, 100, 1);
+    this.batteryHealth.onGet(() => this.read(() => this.device.batteryHealthPercent ?? 0));
+    this.batteryCycles = this.customBatteryCharacteristic('Battery Cycles', BATTERY_CYCLES_UUID, 0, 100_000, 1);
+    this.batteryCycles.onGet(() => this.read(() => this.device.batteryCycles ?? 0));
 
     this.batteryTemperature = this.service(Service.TemperatureSensor, 'battery-temperature', 'Battery Temperature', true)!;
     this.batteryTemperature
@@ -145,6 +153,24 @@ export class River3Accessory {
     );
   }
 
+  private customBatteryCharacteristic(name: string, uuid: string, minValue: number, maxValue: number, minStep: number): Characteristic {
+    const { Characteristic, Formats, Perms } = this.platform.api.hap;
+    const existing = this.battery.characteristics.find((c) => c.UUID === uuid);
+    if (existing) {
+      return existing;
+    }
+    return this.battery.addCharacteristic(
+      new Characteristic(name, uuid, {
+        format: Formats.UINT16,
+        unit: name === 'Battery Health' ? '%' : 'cycles',
+        perms: [Perms.PAIRED_READ, Perms.NOTIFY],
+        minValue,
+        maxValue,
+        minStep,
+      }),
+    );
+  }
+
   private bindSwitch(service: Service, control: Exclude<ControlName, 'ledMode'>): void {
     service
       .getCharacteristic(this.platform.api.hap.Characteristic.On)
@@ -216,6 +242,14 @@ export class River3Accessory {
     }
     this.battery.updateCharacteristic(Characteristic.ChargingState, this.chargingState());
     this.battery.updateCharacteristic(Characteristic.StatusLowBattery, this.lowBattery());
+    const health = this.device.batteryHealthPercent;
+    if (health !== undefined) {
+      this.batteryHealth?.updateValue(health);
+    }
+    const cycles = this.device.batteryCycles;
+    if (cycles !== undefined) {
+      this.batteryCycles?.updateValue(cycles);
+    }
     const temperature = this.device.batteryTemperatureC;
     if (temperature !== undefined) {
       this.batteryTemperature.updateCharacteristic(Characteristic.CurrentTemperature, temperature);

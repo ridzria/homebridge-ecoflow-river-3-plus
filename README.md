@@ -10,7 +10,7 @@ A [Homebridge](https://homebridge.io) plugin that adds the **EcoFlow RIVER 3 Plu
 |---|---|
 | **AC Outlets** | Turns the AC sockets on and off. Over Matter it also reports power in watts and lifetime energy |
 | **12V Outlet** | Turns the 12 V car socket on and off, with the same power and energy readings over Matter |
-| **Battery** | Charge level, charging state and a low-battery warning |
+| **Battery** | Charge level, charging state, low-battery warning, and custom health/cycle values for compatible HomeKit apps |
 | **Light** (RIVER 3 Plus) | The light bar: off, dim (50% or below) or bright |
 | **Mains Power** | A contact sensor that opens when mains power is lost, for power-cut notifications and automations |
 | **X-Boost** (optional) | A switch for X-Boost |
@@ -194,7 +194,7 @@ Features are implemented one at a time, in the order listed, from verified telem
 - [x] USB-A and USB-C power sensors (Matter)
 - [x] AC output power in legacy HomeKit mode (Eve/Controller `Consumption`)
 - [x] 12 V DC output power in legacy HomeKit mode (Eve/Controller `Consumption`)
-- [ ] Battery health and cycle count
+- [x] Battery health and cycle count (custom HomeKit characteristics for compatible apps)
 - [ ] Charge/discharge remaining time
 - [ ] PV/solar input power and energy totals
 - [ ] Error, alarm, and protection sensors

@@ -7,6 +7,17 @@ All notable changes to this project are documented here.
 ### Added
 
 - Added a roadmap for verified EcoFlow telemetry and Homebridge/Matter features.
+- Added read-only custom HomeKit battery-health and cycle-count characteristics for compatible companion apps.
+
+## [0.7.0] - 2026-11-16
+
+### Added
+
+- Added Battery Health and Battery Cycles custom HomeKit characteristics.
+
+### Live validation
+
+- Confirmed in Eve with Battery Health at 100% and Battery Cycles at 1.
 
 ## [0.6.0] - 2026-11-16
 

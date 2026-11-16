@@ -16,6 +16,8 @@ interface SimulatedUnit {
 const CMD_FUNC = 254;
 const DISPLAY = 21;
 const SET_REPLY = 18;
+const BMS_FUNC = 3;
+const BMS_HEARTBEAT = 1;
 
 /**
  * A stand-in for EcoFlow's cloud and a RIVER 3 Plus, for trying the plugin
@@ -55,6 +57,7 @@ export class SimulatorTransport extends EventEmitter implements Transport {
     this.emit('connect');
     for (const serialNumber of this.units.keys()) {
       this.sendDisplay(serialNumber, true);
+      this.sendBmsHeartbeat(serialNumber);
     }
     this.timer = setInterval(() => this.tick(), this.tickMs);
     this.timer.unref();
@@ -96,6 +99,7 @@ export class SimulatorTransport extends EventEmitter implements Transport {
         ]),
       );
       this.sendDisplay(serialNumber, false);
+      this.sendBmsHeartbeat(serialNumber);
     }, this.replyDelayMs);
     reply.unref();
     return true;
@@ -145,6 +149,9 @@ export class SimulatorTransport extends EventEmitter implements Transport {
     const fields: Record<string, unknown> = {
       cms_batt_soc: unit.soc,
       bms_batt_soc: unit.soc,
+      cms_batt_soh: 100,
+      soh: 1,
+      cycles: 1,
       bms_min_cell_temp: unit.temperatureC,
       bms_max_cell_temp: unit.temperatureC,
       cms_chg_dsg_state: charging ? 2 : unit.mains ? 0 : 1,
@@ -172,6 +179,22 @@ export class SimulatorTransport extends EventEmitter implements Transport {
       serialNumber,
       'data',
       encode.envelope([{ cmdFunc: CMD_FUNC, cmdId: DISPLAY, seq: generateSeq(), encType: 1, pdata: encode.display(fields) }]),
+    );
+  }
+
+  private sendBmsHeartbeat(serialNumber: string): void {
+    this.emit(
+      'message',
+      serialNumber,
+      'data',
+      encode.envelope([
+        {
+          cmdFunc: BMS_FUNC,
+          cmdId: BMS_HEARTBEAT,
+          src: 3,
+          pdata: encode.bmsHeartbeat({ cycles: 1, soh: 100, temp: 27 }),
+        },
+      ]),
     );
   }
 }

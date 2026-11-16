@@ -165,6 +165,18 @@ export class River3Device extends EventEmitter {
     return maximum ?? minimum;
   }
 
+  /** Battery state of health percentage, or undefined before the first BMS report. */
+  get batteryHealthPercent(): number | undefined {
+    const health = this.number('real_soh') ?? this.number('soh') ?? this.number('cms_batt_soh') ?? this.number('bms_batt_soh');
+    return health === undefined ? undefined : Math.min(100, Math.max(0, health));
+  }
+
+  /** Completed battery cycles, or undefined before the first BMS report. */
+  get batteryCycles(): number | undefined {
+    const cycles = this.number('cycles');
+    return cycles === undefined ? undefined : Math.max(0, Math.round(cycles));
+  }
+
   get charging(): boolean {
     const state = this.number('cms_chg_dsg_state') ?? this.number('bms_chg_dsg_state');
     if (state !== undefined) {

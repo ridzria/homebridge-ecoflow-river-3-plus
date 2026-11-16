@@ -6,6 +6,12 @@ All notable changes to this project are documented here.
 
 No unreleased changes yet.
 
+## [0.12.1] - 2026-11-16
+
+### Fixed
+
+- Corrected the Homebridge settings schema to use standard object-level `required` arrays.
+
 ## [0.12.0] - 2026-11-16
 
 ### Added

@@ -6,12 +6,14 @@
   "footerDisplay": "Your password is stored in Homebridge's config.json, like any other plugin setting.",
   "schema": {
     "type": "object",
+    "required": [
+      "name"
+    ],
     "properties": {
       "name": {
         "title": "Name",
         "type": "string",
-        "default": "EcoFlow RIVER 3 Plus",
-        "required": true
+        "default": "EcoFlow RIVER 3 Plus"
       },
       "email": {
         "title": "EcoFlow app email",
@@ -91,18 +93,20 @@
         "type": "array",
         "items": {
           "type": "object",
+          "required": [
+            "name",
+            "serialNumber"
+          ],
           "properties": {
             "name": {
               "title": "Name",
               "type": "string",
-              "default": "RIVER 3 Plus",
-              "required": true
+              "default": "RIVER 3 Plus"
             },
             "serialNumber": {
               "title": "Serial number",
               "description": "On the label under the unit and in the EcoFlow app. RIVER 3 Plus serial numbers start with R63, RIVER 3 with R65.",
-              "type": "string",
-              "required": true
+              "type": "string"
             },
             "acOutlet": {
               "title": "Show the AC outlets",

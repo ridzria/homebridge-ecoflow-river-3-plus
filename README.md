@@ -15,7 +15,7 @@ A [Homebridge](https://homebridge.io) plugin that adds the **EcoFlow RIVER 3 Plu
 | **Mains Power** | A contact sensor that opens when mains power is lost, for power-cut notifications and automations |
 | **X-Boost** (optional) | A switch for X-Boost |
 
-When Matter is enabled, the plugin also exposes read-only **Input Power** and **Output Power** electrical sensors.
+When Matter is enabled, the plugin also exposes read-only **Input Power**, **Output Power**, and **PV Input Power** electrical sensors.
 
 When the unit cannot be reached, HomeKit tiles show "No Response" and Matter commands fail.
 
@@ -196,7 +196,8 @@ Features are implemented one at a time, in the order listed, from verified telem
 - [x] 12 V DC output power in legacy HomeKit mode (Eve/Controller `Consumption`)
 - [x] Battery health and cycle count (custom HomeKit characteristics for compatible apps)
 - [x] Charge/discharge remaining time (custom HomeKit characteristics in minutes)
-- [ ] PV/solar input power and energy totals
+- [ ] PV/solar input power (implemented; live validation pending)
+- [ ] PV/solar energy totals (awaiting a verified EcoFlow PV-energy statistic)
 - [ ] Error, alarm, and protection sensors
 - [ ] Additional verified controls such as charge limits and timers
 

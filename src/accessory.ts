@@ -28,6 +28,7 @@ export class River3Accessory {
   private readonly batteryCycles?: Characteristic;
   private readonly chargeRemaining?: Characteristic;
   private readonly dischargeRemaining?: Characteristic;
+  private readonly pvInputPower?: Characteristic;
 
   constructor(
     private readonly platform: River3Platform,
@@ -59,6 +60,9 @@ export class River3Accessory {
     this.chargeRemaining.onGet(() => this.read(() => this.device.chargeRemainingMinutes ?? 0));
     this.dischargeRemaining = this.customBatteryCharacteristic('Discharge Remaining', DISCHARGE_REMAINING_UUID, 0, 65_535, 1, 'min');
     this.dischargeRemaining.onGet(() => this.read(() => this.device.dischargeRemainingMinutes ?? 0));
+    // Use Eve's known Consumption schema so legacy HomeKit controllers render a number.
+    this.pvInputPower = this.customBatteryCharacteristic('PV Input Power', EVE_CONSUMPTION_UUID, 0, 3_000, 0.1, 'W', this.platform.api.hap.Formats.FLOAT);
+    this.pvInputPower.onGet(() => this.read(() => this.device.pvInputWatts));
 
     this.batteryTemperature = this.service(Service.TemperatureSensor, 'battery-temperature', 'Battery Temperature', true)!;
     this.batteryTemperature
@@ -161,7 +165,15 @@ export class River3Accessory {
     );
   }
 
-  private customBatteryCharacteristic(name: string, uuid: string, minValue: number, maxValue: number, minStep: number, unit = name === 'Battery Health' ? '%' : 'cycles'): Characteristic {
+  private customBatteryCharacteristic(
+    name: string,
+    uuid: string,
+    minValue: number,
+    maxValue: number,
+    minStep: number,
+    unit = name === 'Battery Health' ? '%' : 'cycles',
+    format = this.platform.api.hap.Formats.UINT16,
+  ): Characteristic {
     const { Characteristic, Formats, Perms } = this.platform.api.hap;
     const existing = this.battery.characteristics.find((c) => c.UUID === uuid);
     if (existing) {
@@ -169,7 +181,7 @@ export class River3Accessory {
     }
     return this.battery.addCharacteristic(
       new Characteristic(name, uuid, {
-        format: Formats.UINT16,
+        format,
         unit,
         perms: [Perms.PAIRED_READ, Perms.NOTIFY],
         minValue,
@@ -266,6 +278,7 @@ export class River3Accessory {
     if (dischargeRemaining !== undefined) {
       this.dischargeRemaining?.updateValue(dischargeRemaining);
     }
+    this.pvInputPower?.updateValue(this.device.pvInputWatts);
     const temperature = this.device.batteryTemperatureC;
     if (temperature !== undefined) {
       this.batteryTemperature.updateCharacteristic(Characteristic.CurrentTemperature, temperature);

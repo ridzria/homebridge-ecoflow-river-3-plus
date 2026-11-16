@@ -212,6 +212,11 @@ export class River3Device extends EventEmitter {
     return Math.max(0, this.number('pow_in_sum_w') ?? 0);
   }
 
+  /** Solar/PV input power in watts. */
+  get pvInputWatts(): number {
+    return Math.max(0, Math.abs(this.number('pow_get_pv') ?? 0));
+  }
+
   get outputWatts(): number {
     return Math.abs(this.number('pow_out_sum_w') ?? 0);
   }

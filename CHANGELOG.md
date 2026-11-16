@@ -12,6 +12,17 @@ All notable changes to this project are documented here.
 - Added read-only custom HomeKit charge/discharge remaining-time characteristics, reported in minutes when EcoFlow provides estimates.
 - Added PV Input Power and PV Energy readings for Matter and Eve/HomeKit using EcoFlow's verified `pow_get_pv` and `pv_in_energy` fields.
 
+## [0.10.0] - 2026-11-16
+
+### Added
+
+- Added PV Input Power and PV Energy readings to Matter and legacy HomeKit/Eve.
+- Added cleanup for the earlier prototype PV characteristic.
+
+### Live validation
+
+- Confirmed live PV power around 5 W and PV energy around 71 Wh in Eve.
+
 ## [0.9.0] - 2026-11-16
 
 ### Added

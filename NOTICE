@@ -1,0 +1,17 @@
+homebridge-ecoflow-river3
+
+This plugin includes material from the hassio-ecoflow-cloud project
+(https://github.com/tolwi/hassio-ecoflow-cloud), licensed under the
+Apache License, Version 2.0:
+
+  - proto/ef_river3.proto is copied from that project unchanged.
+  - The sign-in flow, MQTT topics, message framing and command layout in
+    src/ecoflow/ are a TypeScript port of that project's Python code.
+  - test/fixtures/reference.json is generated with that project's protobuf
+    classes (see scripts/make_reference_fixtures.py).
+
+The way the AC and 12 V output states are read from the flow-info fields
+follows the ha-ef-ble project (https://github.com/rabits/ha-ef-ble), also
+licensed under the Apache License, Version 2.0.
+
+This plugin is not made, endorsed or supported by EcoFlow.

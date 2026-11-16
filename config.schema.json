@@ -1,0 +1,169 @@
+{
+  "pluginAlias": "EcoFlowRiver3",
+  "pluginType": "platform",
+  "singular": true,
+  "headerDisplay": "Adds the EcoFlow RIVER 3 and RIVER 3 Plus to Apple Home. It signs in to EcoFlow's cloud with your EcoFlow app account.",
+  "footerDisplay": "Your password is stored in Homebridge's config.json, like any other plugin setting.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "title": "Name",
+        "type": "string",
+        "default": "EcoFlow RIVER 3",
+        "required": true
+      },
+      "email": {
+        "title": "EcoFlow app email",
+        "type": "string",
+        "format": "email"
+      },
+      "password": {
+        "title": "EcoFlow app password",
+        "type": "string"
+      },
+      "apiHost": {
+        "title": "EcoFlow region",
+        "description": "EcoFlow keeps accounts in separate regions. If sign-in is refused with a correct password, try the other one.",
+        "type": "string",
+        "default": "api.ecoflow.com",
+        "oneOf": [
+          {
+            "title": "Global and US (api.ecoflow.com)",
+            "enum": [
+              "api.ecoflow.com"
+            ]
+          },
+          {
+            "title": "EcoFlow app service (api-s.ecoflow.com)",
+            "enum": [
+              "api-s.ecoflow.com"
+            ]
+          },
+          {
+            "title": "Europe (api-e.ecoflow.com)",
+            "enum": [
+              "api-e.ecoflow.com"
+            ]
+          },
+          {
+            "title": "Americas (api-a.ecoflow.com)",
+            "enum": [
+              "api-a.ecoflow.com"
+            ]
+          }
+        ]
+      },
+      "protocol": {
+        "title": "Connect to Apple Home using",
+        "description": "Matter lets Apple Home show power in watts. It needs Homebridge 2.3 or later with Matter switched on for this bridge, and you pair with the bridge's Matter code. Automatic uses Matter when it is switched on and HomeKit otherwise.",
+        "type": "string",
+        "default": "auto",
+        "oneOf": [
+          {
+            "title": "Automatic",
+            "enum": [
+              "auto"
+            ]
+          },
+          {
+            "title": "Matter (shows watts)",
+            "enum": [
+              "matter"
+            ]
+          },
+          {
+            "title": "HomeKit (no watts in the Home app)",
+            "enum": [
+              "homekit"
+            ]
+          }
+        ]
+      },
+      "simulate": {
+        "title": "Simulate a RIVER 3 Plus",
+        "description": "Shows a pretend unit without signing in to EcoFlow. Useful for trying the plugin before you have a unit.",
+        "type": "boolean",
+        "default": false
+      },
+      "devices": {
+        "title": "Devices",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "title": "Name",
+              "type": "string",
+              "default": "RIVER 3 Plus",
+              "required": true
+            },
+            "serialNumber": {
+              "title": "Serial number",
+              "description": "On the label under the unit and in the EcoFlow app. RIVER 3 Plus serial numbers start with R63, RIVER 3 with R65.",
+              "type": "string",
+              "required": true
+            },
+            "acOutlet": {
+              "title": "Show the AC outlets",
+              "type": "boolean",
+              "default": true
+            },
+            "dcOutlet": {
+              "title": "Show the 12 V outlet",
+              "type": "boolean",
+              "default": true
+            },
+            "light": {
+              "title": "Show the light bar (RIVER 3 Plus)",
+              "type": "boolean"
+            },
+            "mainsSensor": {
+              "title": "Show a mains power sensor",
+              "description": "A contact sensor that opens when mains power is lost, for power-cut notifications and automations.",
+              "type": "boolean",
+              "default": true
+            },
+            "xboostSwitch": {
+              "title": "Show an X-Boost switch",
+              "type": "boolean",
+              "default": false
+            },
+            "lowBatteryThreshold": {
+              "title": "Low battery level (%)",
+              "type": "integer",
+              "default": 20,
+              "minimum": 0,
+              "maximum": 100
+            }
+          }
+        }
+      }
+    }
+  },
+  "layout": [
+    "name",
+    "email",
+    {
+      "key": "password",
+      "type": "password"
+    },
+    "apiHost",
+    "protocol",
+    "simulate",
+    {
+      "key": "devices",
+      "type": "array",
+      "items": [
+        "devices[].name",
+        "devices[].serialNumber",
+        "devices[].acOutlet",
+        "devices[].dcOutlet",
+        "devices[].light",
+        "devices[].mainsSensor",
+        "devices[].xboostSwitch",
+        "devices[].lowBatteryThreshold"
+      ]
+    }
+  ]
+}

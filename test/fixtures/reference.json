@@ -1,0 +1,140 @@
+{
+  "source": "hassio-ecoflow-cloud ef_river3_pb2.py, protobuf 6.33.6",
+  "commands": [
+    {
+      "field": "cfg_ac_out_open",
+      "value": 1,
+      "seq": 999912345,
+      "sn": "R631ZEB4XF123456",
+      "hex": "0a370a03e00401102018022001280140fe014811500358017099e7e5dc037801800113880101ca0110523633315a4542345846313233343536"
+    },
+    {
+      "field": "cfg_ac_out_open",
+      "value": 0,
+      "seq": 999954321,
+      "sn": "R631ZEB4XF123456",
+      "hex": "0a370a03e00400102018022001280140fe014811500358017091afe8dc037801800113880101ca0110523633315a4542345846313233343536"
+    },
+    {
+      "field": "cfg_dc12v_out_open",
+      "value": 1,
+      "seq": 999910000,
+      "sn": "R631ZEB4XF123456",
+      "hex": "0a370a03900101102018022001280140fe0148115003580170f0d4e5dc037801800113880101ca0110523633315a4542345846313233343536"
+    },
+    {
+      "field": "xboost_en",
+      "value": 0,
+      "seq": 999999999,
+      "sn": "R631ZEB4XF123456",
+      "hex": "0a370a03c80100102018022001280140fe0148115003580170ff93ebdc037801800113880101ca0110523633315a4542345846313233343536"
+    },
+    {
+      "field": "cfg_led_mode",
+      "value": 2,
+      "seq": 999955555,
+      "sn": "R631ZEB4XF123456",
+      "hex": "0a370a03c80502102018022001280140fe0148115003580170e3b8e8dc037801800113880101ca0110523633315a4542345846313233343536"
+    },
+    {
+      "field": "en_beep",
+      "value": 1,
+      "seq": 999911111,
+      "sn": "R631ZEB4XF123456",
+      "hex": "0a360a024801102018022001280140fe0148115002580170c7dde5dc037801800113880101ca0110523633315a4542345846313233343536"
+    }
+  ],
+  "telemetry": [
+    {
+      "name": "display upload, XOR scrambled",
+      "hex": "0a5f0a4a726fef9f2d4a6f6f072da76e6ee76d6fc26d6f6f57aebf636efa606f6fdf2dff7f9290909090909090906eda7f6f6fc02dbf7e6dc7796d97796dea786f6f55ad957368656a676d7f8e4e10021820300140fe014815504a70ef98e9dc03",
+      "expected": {
+        "pow_in_sum_w": 120.25,
+        "pow_out_sum_w": 58.0,
+        "xboost_en": 1,
+        "flow_info_12v": 0,
+        "pow_get_12v": -11.5,
+        "plug_in_info_ac_charger_flag": 1,
+        "bms_batt_soc": 88.0,
+        "bms_min_cell_temp": -3,
+        "cms_batt_soc": 87.5,
+        "cms_chg_dsg_state": 2,
+        "led_mode": 2,
+        "flow_info_ac_out": 2,
+        "pow_get_ac_out": -46.5,
+        "ac_out_energy": 4321
+      }
+    },
+    {
+      "name": "display upload, plain",
+      "hex": "0a5b0a4a1d0080f0422500006842c80101880200ad02000038c1d00c01950f0000b0429010fdffffffffffffffff01b5100000af42d01102a81602f81602851700003ac2fa1c070a05080210e12110021820300040fe014815504a7000",
+      "expected": {
+        "pow_in_sum_w": 120.25,
+        "pow_out_sum_w": 58.0,
+        "xboost_en": 1,
+        "flow_info_12v": 0,
+        "pow_get_12v": -11.5,
+        "plug_in_info_ac_charger_flag": 1,
+        "bms_batt_soc": 88.0,
+        "bms_min_cell_temp": -3,
+        "cms_batt_soc": 87.5,
+        "cms_chg_dsg_state": 2,
+        "led_mode": 2,
+        "flow_info_ac_out": 2,
+        "pow_get_ac_out": -46.5,
+        "ac_out_energy": 4321
+      }
+    },
+    {
+      "name": "two headers in one payload",
+      "hex": "0a1a0a09b55b4dc85a4d4d4d4d10021820300140fe0148155009704d0a210a109b4f4e4eb20feb4a4e8e210df641b02210021820300140fe0148165010704e",
+      "expected": {
+        "flow_info_ac_out": 0,
+        "pow_get_ac_out": 0.0,
+        "temp_pcs_dc": 31.5,
+        "plug_in_info_ac_in_vol": 239.75,
+        "bms_full_cap": 13950
+      }
+    },
+    {
+      "name": "accepted set reply",
+      "hex": "0a160a051504e5010410021820300140fe01481250057005",
+      "expected": {
+        "config_ok": true,
+        "cfg_ac_out_open": 1
+      }
+    },
+    {
+      "name": "refused set reply is ignored",
+      "hex": "0a160a051000e0040110021820300040fe01481250057000",
+      "expected": {}
+    },
+    {
+      "name": "nested fields are flattened",
+      "hex": "0a1a0a091001da02040801101e10021820300040fe01481250097000",
+      "expected": {
+        "config_ok": true,
+        "cfg_energy_backup_energy_backup_en": 1,
+        "cfg_energy_backup_energy_backup_start_soc": 30
+      }
+    },
+    {
+      "name": "BMS heartbeat",
+      "hex": "0a1c0a0c395e41117905c4080989a74b10021820300140204832500c7009",
+      "expected": {
+        "soc": 87,
+        "temp": 24,
+        "cycles": 12,
+        "f32_show_soc": 87.25
+      }
+    },
+    {
+      "name": "CMS heartbeat",
+      "hex": "0a190a090a0738647d000081421002182030004020480250097000",
+      "expected": {
+        "msg32_2_1_cms_batt_soc": 64.5,
+        "msg32_2_1_cms_max_chg_soc": 100
+      }
+    }
+  ]
+}

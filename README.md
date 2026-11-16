@@ -205,10 +205,6 @@ The RIVER 3 Plus light reports four verified modes: Off, Dim, Bright, and SOS. H
 
 ## Development
 
-### Feature branches
-
-Experimental work that is not yet live-validated stays on a feature branch. The PV input-power prototype is currently preserved on `feature/pv-input-power`; `main` remains the latest released baseline until the feature is validated and approved.
-
 ```bash
 npm install
 ```

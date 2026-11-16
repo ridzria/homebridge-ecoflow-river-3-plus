@@ -56,6 +56,8 @@ const QUOTA_KEYS = new Set([
   'msg32_2_1_cms_chg_rem_time', 'msg32_2_1_cms_dsg_rem_time',
   'pow_get_pv',
   'pv_in_energy',
+  'all_err_code', 'all_bms_fault', 'bms_alarm_state1', 'bms_alarm_state2',
+  'bms_protect_state1', 'bms_protect_state2', 'bms_fault_state', 'water_in_flag',
 ]);
 
 function normaliseQuotaKey(key: string): string {
@@ -223,6 +225,36 @@ export class River3Device extends EventEmitter {
   get pvInputEnergyWh(): number | undefined {
     const energy = this.number('pv_in_energy');
     return energy === undefined ? undefined : Math.max(0, energy);
+  }
+
+  /** Device-wide error code, or undefined before the first report. */
+  get errorCode(): number | undefined { return this.number('all_err_code'); }
+
+  /** Combined BMS alarm bitmask, or undefined before the first report. */
+  get alarmState(): number | undefined {
+    const first = this.number('bms_alarm_state1');
+    const second = this.number('bms_alarm_state2');
+    return first === undefined && second === undefined ? undefined : (first ?? 0) | (second ?? 0);
+  }
+
+  /** Combined BMS protection bitmask, or undefined before the first report. */
+  get protectionState(): number | undefined {
+    const first = this.number('bms_protect_state1');
+    const second = this.number('bms_protect_state2');
+    return first === undefined && second === undefined ? undefined : (first ?? 0) | (second ?? 0);
+  }
+
+  /** Combined BMS fault bitmask, or undefined before the first report. */
+  get faultState(): number | undefined {
+    const fault = this.number('bms_fault_state');
+    const allFault = this.number('all_bms_fault');
+    return fault === undefined && allFault === undefined ? undefined : (fault ?? 0) | (allFault ?? 0);
+  }
+
+  /** Water-ingress flag, or undefined before the first report. */
+  get waterIngress(): boolean | undefined {
+    const flag = this.number('water_in_flag');
+    return flag === undefined ? undefined : flag !== 0;
   }
 
   get outputWatts(): number {

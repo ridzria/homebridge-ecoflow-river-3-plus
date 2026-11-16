@@ -108,11 +108,11 @@ Implement roadmap items in the listed order. A deviation is allowed only for a d
 
 ## Three-person collaboration
 
-Work may use three complementary roles:
+The project uses these role names:
 
-- **User:** performs live EcoFlow, HomeKit, and Matter tests; approves behavior and consequential releases.
-- **Primary agent:** owns implementation, integration, documentation, verification, commits, tags, and GitHub Releases after approval.
-- **Sub-agent:** performs independent telemetry research, compatibility investigation, test review, or code review.
+- **PM:** the user owns product direction, live EcoFlow/HomeKit/Matter testing, prioritisation, and approval of consequential releases.
+- **Primary Agent:** owns implementation, integration, verification, documentation, commits, tags, and GitHub Releases after PM approval.
+- **Junior Agent:** performs independent telemetry research, compatibility investigation, focused test review, or code review under the Primary Agent's direction.
 
-Sub-agents may investigate or review roadmap items in parallel, but only one roadmap feature is delivered and live-validated at a time. Sub-agents must not publish releases, expose credentials, control the device, or expand scope without explicit authorization.
+The PM may check and approve work while the Primary Agent continues implementation. Junior Agent work may run in parallel, but only one roadmap feature is delivered and live-validated at a time. The Junior Agent must not publish releases, expose credentials, control the device, or expand scope without explicit authorization.
 

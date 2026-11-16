@@ -8,6 +8,16 @@ All notable changes to this project are documented here.
 
 - Added a roadmap for verified EcoFlow telemetry and Homebridge/Matter features.
 
+## [0.5.0] - 2026-11-16
+
+### Added
+
+- Added Matter USB-A and USB-C power sensors.
+
+### Live validation
+
+- Confirmed in Apple Home with USB-A reporting 7W and USB-C reporting 0W.
+
 ## [0.4.0] - 2026-11-16
 
 ### Added

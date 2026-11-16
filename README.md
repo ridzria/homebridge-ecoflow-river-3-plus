@@ -191,9 +191,9 @@ Features are implemented one at a time from verified telemetry, with a fixture/t
 
 - [x] Battery temperature sensor (HomeKit and Matter)
 - [x] Total input/output power sensors (Matter)
+- [x] USB-A and USB-C power sensors (Matter)
 - [ ] AC output power in legacy HomeKit mode
 - [ ] 12 V DC output power in legacy HomeKit mode
-- [ ] USB-A and USB-C power readings
 - [ ] Battery health and cycle count
 - [ ] Charge/discharge remaining time
 - [ ] PV/solar input power and energy totals

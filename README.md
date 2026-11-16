@@ -201,7 +201,13 @@ Features are implemented one at a time, in the order listed, from verified telem
 - [ ] Error, alarm, and protection sensors
 - [ ] Additional verified controls such as charge limits and timers
 
+The RIVER 3 Plus light reports four verified modes: Off, Dim, Bright, and SOS. HomeKit exposes SOS as a separate read/write characteristic on the Light service; Matter continues to expose Off/Dim/Bright through its level control.
+
 ## Development
+
+### Feature branches
+
+Experimental work that is not yet live-validated stays on a feature branch. The PV input-power prototype is currently preserved on `feature/pv-input-power`; `main` remains the latest released baseline until the feature is validated and approved.
 
 ```bash
 npm install

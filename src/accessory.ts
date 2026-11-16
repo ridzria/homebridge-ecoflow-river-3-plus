@@ -8,6 +8,7 @@ import { KNOWN_SERIAL_PREFIXES, type DeviceConfig } from './settings.js';
 const EVE_CONSUMPTION_UUID = 'E863F10D-079E-48FF-8F27-9C2605A29F52';
 const BATTERY_HEALTH_UUID = 'C7A5B4D1-7C5E-4F7A-9E31-7E6B1B7A0001';
 const BATTERY_CYCLES_UUID = 'C7A5B4D1-7C5E-4F7A-9E31-7E6B1B7A0002';
+const SOS_MODE_UUID = 'C7A5B4D1-7C5E-4F7A-9E31-7E6B1B7A0006';
 const CHARGE_REMAINING_UUID = 'C7A5B4D1-7C5E-4F7A-9E31-7E6B1B7A0003';
 const DISCHARGE_REMAINING_UUID = 'C7A5B4D1-7C5E-4F7A-9E31-7E6B1B7A0004';
 /** UUID used briefly by the PV prototype before switching to Eve's Consumption schema. */
@@ -24,11 +25,13 @@ export class River3Accessory {
   private readonly dcOutlet?: Service;
   private readonly xboost?: Service;
   private readonly light?: Service;
+  private readonly sosSwitch?: Service;
   private readonly mains?: Service;
   private readonly acWatts?: Characteristic;
   private readonly dcWatts?: Characteristic;
   private readonly batteryHealth?: Characteristic;
   private readonly batteryCycles?: Characteristic;
+  private readonly sosMode?: Characteristic;
   private readonly chargeRemaining?: Characteristic;
   private readonly dischargeRemaining?: Characteristic;
   private readonly pvInputPower?: Characteristic;
@@ -123,6 +126,21 @@ export class River3Accessory {
           const percent = Number(value);
           this.write('ledMode', percent <= 0 ? LED_MODE.off : percent <= 50 ? LED_MODE.dim : LED_MODE.bright);
         });
+      const { Formats, Perms } = this.platform.api.hap;
+      this.sosMode = this.light.characteristics.find((c) => c.UUID === SOS_MODE_UUID) ?? this.light.addCharacteristic(
+        new Characteristic('SOS Mode', SOS_MODE_UUID, {
+          format: Formats.BOOL,
+          perms: [Perms.PAIRED_READ, Perms.PAIRED_WRITE, Perms.NOTIFY],
+        }),
+      );
+      this.sosMode.onGet(() => this.read(() => this.device.ledMode === LED_MODE.sos));
+      this.sosMode.onSet((value) => this.write('ledMode', value ? LED_MODE.sos : LED_MODE.bright));
+
+      this.sosSwitch = this.service(Service.Switch, 'sos', 'SOS Mode', true);
+      this.sosSwitch
+        ?.getCharacteristic(Characteristic.On)
+        .onGet(() => this.read(() => this.device.ledMode === LED_MODE.sos))
+        .onSet((value) => this.write('ledMode', value ? LED_MODE.sos : LED_MODE.bright));
     }
 
     this.mains = this.service(Service.ContactSensor, 'mains', 'Mains Power', config.mainsSensor);
@@ -314,7 +332,9 @@ export class River3Accessory {
       if (this.device.ledMode !== LED_MODE.off) {
         this.light.updateCharacteristic(Characteristic.Brightness, this.brightness());
       }
+      this.sosMode?.updateValue(this.device.ledMode === LED_MODE.sos);
     }
+    this.sosSwitch?.updateCharacteristic(Characteristic.On, this.device.ledMode === LED_MODE.sos);
     this.mains?.updateCharacteristic(Characteristic.ContactSensorState, this.mainsState());
   }
 }

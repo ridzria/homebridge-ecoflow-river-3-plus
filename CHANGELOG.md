@@ -19,6 +19,16 @@ All notable changes to this project are documented here.
 - Added PV Input Power and PV Energy readings to Matter and legacy HomeKit/Eve.
 - Added cleanup for the earlier prototype PV characteristic.
 
+## [0.11.0] - 2026-11-16
+
+### Added
+
+- Added read-only Error Code, Alarm State, Protection State, Fault State, and Water Ingress values to the Battery service.
+
+### Live validation
+
+- Confirmed in Eve with the live RIVER 3 Plus reporting all-clear status values.
+
 ### Live validation
 
 - Confirmed live PV power around 5 W and PV energy around 71 Wh in Eve.

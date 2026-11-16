@@ -14,6 +14,11 @@ const DISCHARGE_REMAINING_UUID = 'C7A5B4D1-7C5E-4F7A-9E31-7E6B1B7A0004';
 /** UUID used briefly by the PV prototype before switching to Eve's Consumption schema. */
 const LEGACY_PV_INPUT_POWER_UUID = 'C7A5B4D1-7C5E-4F7A-9E31-7E6B1B7A0005';
 const PV_ENERGY_UUID = 'C7A5B4D1-7C5E-4F7A-9E31-7E6B1B7A0007';
+const ERROR_CODE_UUID = 'C7A5B4D1-7C5E-4F7A-9E31-7E6B1B7A0008';
+const ALARM_STATE_UUID = 'C7A5B4D1-7C5E-4F7A-9E31-7E6B1B7A0009';
+const PROTECTION_STATE_UUID = 'C7A5B4D1-7C5E-4F7A-9E31-7E6B1B7A000A';
+const FAULT_STATE_UUID = 'C7A5B4D1-7C5E-4F7A-9E31-7E6B1B7A000B';
+const WATER_INGRESS_UUID = 'C7A5B4D1-7C5E-4F7A-9E31-7E6B1B7A000C';
 
 type ServiceType = WithUUID<typeof Service>;
 
@@ -36,6 +41,11 @@ export class River3Accessory {
   private readonly dischargeRemaining?: Characteristic;
   private readonly pvInputPower?: Characteristic;
   private readonly pvEnergy?: Characteristic;
+  private readonly errorCode?: Characteristic;
+  private readonly alarmState?: Characteristic;
+  private readonly protectionState?: Characteristic;
+  private readonly faultState?: Characteristic;
+  private readonly waterIngress?: Characteristic;
 
   constructor(
     private readonly platform: River3Platform,
@@ -76,6 +86,16 @@ export class River3Accessory {
     this.pvInputPower.onGet(() => this.read(() => this.device.pvInputWatts));
     this.pvEnergy = this.customBatteryCharacteristic('PV Energy', PV_ENERGY_UUID, 0, 4_294_967_295, 1, 'Wh', this.platform.api.hap.Formats.UINT32);
     this.pvEnergy.onGet(() => this.read(() => this.device.pvInputEnergyWh ?? 0));
+    this.errorCode = this.customBatteryCharacteristic('Error Code', ERROR_CODE_UUID, 0, 65_535, 1, 'code');
+    this.errorCode.onGet(() => this.read(() => this.device.errorCode ?? 0));
+    this.alarmState = this.customBatteryCharacteristic('Alarm State', ALARM_STATE_UUID, 0, 65_535, 1, 'bitmask');
+    this.alarmState.onGet(() => this.read(() => this.device.alarmState ?? 0));
+    this.protectionState = this.customBatteryCharacteristic('Protection State', PROTECTION_STATE_UUID, 0, 65_535, 1, 'bitmask');
+    this.protectionState.onGet(() => this.read(() => this.device.protectionState ?? 0));
+    this.faultState = this.customBatteryCharacteristic('Fault State', FAULT_STATE_UUID, 0, 65_535, 1, 'bitmask');
+    this.faultState.onGet(() => this.read(() => this.device.faultState ?? 0));
+    this.waterIngress = this.customBatteryCharacteristic('Water Ingress', WATER_INGRESS_UUID, 0, 1, 1, '', this.platform.api.hap.Formats.UINT8);
+    this.waterIngress.onGet(() => this.read(() => this.device.waterIngress ? 1 : 0));
 
     this.batteryTemperature = this.service(Service.TemperatureSensor, 'battery-temperature', 'Battery Temperature', true)!;
     this.batteryTemperature
@@ -311,6 +331,11 @@ export class River3Accessory {
     if (pvEnergy !== undefined) {
       this.pvEnergy?.updateValue(pvEnergy);
     }
+    this.errorCode?.updateValue(this.device.errorCode ?? 0);
+    this.alarmState?.updateValue(this.device.alarmState ?? 0);
+    this.protectionState?.updateValue(this.device.protectionState ?? 0);
+    this.faultState?.updateValue(this.device.faultState ?? 0);
+    this.waterIngress?.updateValue(this.device.waterIngress ? 1 : 0);
     const temperature = this.device.batteryTemperatureC;
     if (temperature !== undefined) {
       this.batteryTemperature.updateCharacteristic(Characteristic.CurrentTemperature, temperature);

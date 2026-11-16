@@ -1,7 +1,7 @@
 {
   "name": "homebridge-ecoflow-river-3-plus",
   "displayName": "EcoFlow RIVER 3 Plus",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "description": "Homebridge plugin that adds the EcoFlow RIVER 3 Plus power station to Apple Home",
   "license": "Apache-2.0",
   "main": "dist/index.js",

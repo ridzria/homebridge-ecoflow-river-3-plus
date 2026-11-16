@@ -8,6 +8,16 @@ All notable changes to this project are documented here.
 
 - Added a roadmap for verified EcoFlow telemetry and Homebridge/Matter features.
 - Added a read-write Maximum Charge battery characteristic for live validation.
+
+## [0.12.0] - 2026-11-16
+
+### Added
+
+- Added the read-write Maximum Charge control in HomeKit/Eve.
+
+### Live validation
+
+- Confirmed changing the limit on the RIVER 3 Plus and restoring it to 100%.
 - Added read-only custom HomeKit battery-health and cycle-count characteristics for compatible companion apps.
 - Added a HomeKit SOS Mode control for the RIVER 3 Plus light using the verified EcoFlow light-mode command.
 - Added read-only custom HomeKit charge/discharge remaining-time characteristics, reported in minutes when EcoFlow provides estimates.

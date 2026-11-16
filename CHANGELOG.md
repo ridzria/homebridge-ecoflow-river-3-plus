@@ -2,6 +2,22 @@
 
 All notable changes to this project are documented here.
 
+## Unreleased
+
+### Added
+
+- Added a roadmap for verified EcoFlow telemetry and Homebridge/Matter features.
+
+## [0.4.0] - 2026-11-16
+
+### Added
+
+- Added Matter electrical sensors for total input and output power.
+
+### Notes
+
+- Apple Home may display these read-only electrical sensors with a generic `Power` label or combine their presentation. Homebridge logs and other Matter controllers can distinguish `Input Power` and `Output Power`.
+
 ## [0.3.0] - 2026-11-16
 
 ### Added

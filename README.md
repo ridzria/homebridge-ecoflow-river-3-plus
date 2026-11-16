@@ -15,6 +15,8 @@ A [Homebridge](https://homebridge.io) plugin that adds the **EcoFlow RIVER 3 Plu
 | **Mains Power** | A contact sensor that opens when mains power is lost, for power-cut notifications and automations |
 | **X-Boost** (optional) | A switch for X-Boost |
 
+When Matter is enabled, the plugin also exposes read-only **Input Power** and **Output Power** electrical sensors.
+
 When the unit cannot be reached, HomeKit tiles show "No Response" and Matter commands fail.
 
 ## Watts in Apple Home: Matter or HomeKit
@@ -176,12 +178,27 @@ Remove only the EcoFlow platform entry from `config.json`, keep a backup, and re
 
 ## Known limits
 
-- Only the AC and 12 V outputs report watts. Input power, USB power, charge limits, charging speed and timers are not exposed. Use the EcoFlow app for those.
+- In legacy HomeKit mode, only the AC and 12 V outputs report watts through third-party characteristics. Input/output power sensors are Matter-only for now.
 - Lifetime energy only appears once the unit has sent its statistics, which may take a while after start-up.
 - The unit can be switched off remotely but not back on, so the plugin has no power switch.
 - The mains sensor relies on the unit's "AC charger connected" flag. Whether that flag drops the moment mains fails has not been confirmed on a real unit.
 - Extra batteries (EB300, EB600) are included in the overall battery level but are not shown separately.
 - The USB ports have no switch on this model, so there is nothing to control.
+
+## Roadmap
+
+Features are implemented one at a time from verified telemetry, with a fixture/test, documentation, versioned changelog entry, and live-device validation before the next feature begins.
+
+- [x] Battery temperature sensor (HomeKit and Matter)
+- [x] Total input/output power sensors (Matter)
+- [ ] AC output power in legacy HomeKit mode
+- [ ] 12 V DC output power in legacy HomeKit mode
+- [ ] USB-A and USB-C power readings
+- [ ] Battery health and cycle count
+- [ ] Charge/discharge remaining time
+- [ ] PV/solar input power and energy totals
+- [ ] Error, alarm, and protection sensors
+- [ ] Additional verified controls such as charge limits and timers
 
 ## Development
 

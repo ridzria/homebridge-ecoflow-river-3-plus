@@ -7,7 +7,7 @@ type MatterAPI = NonNullable<API['matter']>;
 type ClusterState = Record<string, unknown>;
 
 /** The separate devices one RIVER 3 becomes in Matter. */
-export type MatterKind = 'ac' | 'dc' | 'light' | 'mains' | 'xboost';
+export type MatterKind = 'ac' | 'dc' | 'input' | 'output' | 'light' | 'mains' | 'xboost';
 
 /** Matter enum values, written out so the plugin does not depend on matter.js at load time. */
 const POWER_MODE = { dc: 1, ac: 2 } as const;
@@ -57,6 +57,7 @@ export class River3MatterAccessory {
     if (config.dcOutlet) {
       kinds.push('dc');
     }
+    kinds.push('input', 'output');
     if (config.light) {
       kinds.push('light');
     }
@@ -75,6 +76,8 @@ export class River3MatterAccessory {
     const labels: Record<MatterKind, string> = {
       ac: 'AC Outlets',
       dc: '12V Outlet',
+      input: 'Input Power',
+      output: 'Output Power',
       light: 'Light',
       mains: 'Mains Power',
       xboost: 'X-Boost',
@@ -85,7 +88,13 @@ export class River3MatterAccessory {
         UUID: matterUuid(this.api, this.config.serialNumber, kind),
         displayName: `${this.config.name} ${labels[kind]}`,
         deviceType:
-          kind === 'light' ? deviceTypes.DimmableLight : kind === 'mains' ? deviceTypes.ContactSensor : deviceTypes.OnOffOutlet,
+          kind === 'light'
+            ? deviceTypes.DimmableLight
+            : kind === 'mains'
+              ? deviceTypes.ContactSensor
+              : kind === 'input' || kind === 'output'
+                ? (deviceTypes as Record<string, unknown>).ElectricalSensor as typeof deviceTypes.OnOffOutlet
+                : deviceTypes.OnOffOutlet,
         manufacturer: 'EcoFlow',
         model,
         serialNumber: `${this.config.serialNumber}-${kind}`,
@@ -176,6 +185,12 @@ export class River3MatterAccessory {
         state.onOff = { onOff: this.device.isOn('dcOutput') };
         state.electricalPowerMeasurement = this.power(this.device.dcOutputWatts, POWER_MODE.dc, initial);
         this.addEnergy(state, this.device.dcOutputEnergyWh, initial);
+        break;
+      case 'input':
+        state.electricalPowerMeasurement = this.power(this.device.inputWatts, 0, initial);
+        break;
+      case 'output':
+        state.electricalPowerMeasurement = this.power(this.device.outputWatts, 0, initial);
         break;
       case 'xboost':
         state.onOff = { onOff: this.device.isOn('xboost') };

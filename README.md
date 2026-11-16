@@ -46,6 +46,22 @@ EcoFlow has not added the RIVER 3 family to its official developer API, so this 
 
 Homebridge 1.8 or later and Node.js 20.18 or later. For watts in Apple Home you need Homebridge 2.3 or later.
 
+### Install from Homebridge UI
+
+1. Open Homebridge Config UI.
+2. Open **Plugins** and search for `homebridge-ecoflow-river-3-plus`.
+3. Install the plugin.
+4. Add the **EcoFlow RIVER 3 Plus** platform configuration.
+5. Enter the EcoFlow app email, password, `api-s.ecoflow.com`, and the unit serial number.
+6. Save and restart Homebridge.
+
+### Install from a terminal
+
+```bash
+sudo npm install -g https://github.com/ridzria/homebridge-ecoflow-river-3-plus.git
+sudo systemctl restart homebridge
+```
+
 ```bash
 npm install -g git+https://github.com/ridzria/homebridge-ecoflow-river-3-plus.git
 ```
@@ -87,9 +103,25 @@ Use the settings form in the Homebridge UI, or add this to the `platforms` list 
 | `devices[].xboostSwitch` | Show an X-Boost switch | `false` |
 | `devices[].lowBatteryThreshold` | Battery level, in percent, at which Home shows a low-battery warning | `20` |
 
-EcoFlow keeps accounts in separate regions. If sign-in is refused with a password you know is right, change `apiHost`: accounts registered in Europe (including the UK) usually need `api-e.ecoflow.com`.
+For the RIVER 3 Plus, use `api-s.ecoflow.com`. This is the app-service host required for the live MQTT telemetry path verified by this plugin.
 
 If EcoFlow refuses the email and password, the plugin stops trying until Homebridge is restarted, so that a wrong password cannot lock the account.
+
+## Raspberry Pi deployment
+
+```bash
+sudo systemctl restart homebridge
+sudo journalctl -u homebridge -f
+```
+
+The expected sequence is `Signed in to EcoFlow`, `Connected to EcoFlow`, `data: ...`, and `is now online`. The EcoFlow iOS app does not need to remain open.
+
+To update an existing installation:
+
+```bash
+sudo npm update -g homebridge-ecoflow-river-3-plus
+sudo systemctl restart homebridge
+```
 
 ## Try it without a unit
 
@@ -108,6 +140,39 @@ ECOFLOW_EMAIL=you@example.com ECOFLOW_PASSWORD='your password' ECOFLOW_SN=R631XX
 ```
 
 Change something in the EcoFlow app while it runs and the change should appear in the output. Running Homebridge in debug mode (`homebridge -D`) logs the same detail.
+
+For a topic-by-topic diagnostic:
+
+```bash
+npm run build
+ECOFLOW_HOST=api-s.ecoflow.com node scripts/probe-topics.mjs
+```
+
+Never share diagnostic output containing credentials, bearer tokens, MQTT passwords, or a full serial number.
+
+## Troubleshooting
+
+### The plugin connects but shows no telemetry
+
+Confirm that the configured host is `api-s.ecoflow.com`, then restart Homebridge in debug mode. Do not use Developer API `accessKey`/`secretKey` values in place of the EcoFlow app email and password.
+
+### Subscription error or `code: "-1"`
+
+Run the topic diagnostic with `api-s`. A successful RIVER 3 Plus connection accepts the `data`, `set_reply`, and `get_reply` topics. Live `data` telemetry is the authoritative source for this model.
+
+### Homebridge cannot start after installation
+
+Verify the platform name:
+
+```json
+"platform": "EcoFlowRiver3Plus"
+```
+
+The serial number should normally begin with `R63`.
+
+### Resetting a broken configuration
+
+Remove only the EcoFlow platform entry from `config.json`, keep a backup, and restart. Do not delete the entire Homebridge persist directory.
 
 ## Known limits
 
@@ -131,6 +196,19 @@ npm test
 The tests cover the wire protocol (against fixtures generated from the reference implementation), sign-in, the cloud connection and its retry rules, device state, the HomeKit accessory using Homebridge's own classes, and the Matter accessories, all with the built-in simulator.
 
 To regenerate the reference fixtures, see `scripts/make_reference_fixtures.py`.
+
+### Publish a release
+
+Update the version in `package.json`, run the checks, then commit and push:
+
+```bash
+npm test
+npm run build
+git diff --check
+git add .
+git commit -m "Release version X.Y.Z"
+git push origin main
+```
 
 ## Credits and licence
 

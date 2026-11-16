@@ -102,3 +102,7 @@ After the user approves a feature and its live test passes:
 
 Use a quoted heredoc or a shell `$'...'` string for multiline `gh release create/edit --notes` content. Do not pass literal `\\n` sequences. Never publish to npm unless the user separately authorizes public package publication.
 
+## Roadmap order
+
+Implement roadmap items in the listed order. A deviation is allowed only for a dependency, compatibility issue, or bug fix that materially improves correctness. When deviating, record the reason in the plan and update the roadmap order in the same change. Do not silently skip ahead.
+

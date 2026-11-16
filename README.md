@@ -187,7 +187,7 @@ Remove only the EcoFlow platform entry from `config.json`, keep a backup, and re
 
 ## Roadmap
 
-Features are implemented one at a time from verified telemetry, with a fixture/test, documentation, versioned changelog entry, and live-device validation before the next feature begins.
+Features are implemented one at a time, in the order listed, from verified telemetry, with a fixture/test, documentation, versioned changelog entry, and live-device validation before the next feature begins. We only change the order for a documented dependency, compatibility issue, or bug fix.
 
 - [x] Battery temperature sensor (HomeKit and Matter)
 - [x] Total input/output power sensors (Matter)

@@ -4,10 +4,7 @@ All notable changes to this project are documented here.
 
 ## Unreleased
 
-### Added
-
-- Added a roadmap for verified EcoFlow telemetry and Homebridge/Matter features.
-- Added a read-write Maximum Charge battery characteristic for live validation.
+No unreleased changes yet.
 
 ## [0.12.0] - 2026-11-16
 
@@ -18,17 +15,6 @@ All notable changes to this project are documented here.
 ### Live validation
 
 - Confirmed changing the limit on the RIVER 3 Plus and restoring it to 100%.
-- Added read-only custom HomeKit battery-health and cycle-count characteristics for compatible companion apps.
-- Added a HomeKit SOS Mode control for the RIVER 3 Plus light using the verified EcoFlow light-mode command.
-- Added read-only custom HomeKit charge/discharge remaining-time characteristics, reported in minutes when EcoFlow provides estimates.
-- Added PV Input Power and PV Energy readings for Matter and Eve/HomeKit using EcoFlow's verified `pow_get_pv` and `pv_in_energy` fields.
-
-## [0.10.0] - 2026-11-16
-
-### Added
-
-- Added PV Input Power and PV Energy readings to Matter and legacy HomeKit/Eve.
-- Added cleanup for the earlier prototype PV characteristic.
 
 ## [0.11.0] - 2026-11-16
 
@@ -39,6 +25,13 @@ All notable changes to this project are documented here.
 ### Live validation
 
 - Confirmed in Eve with the live RIVER 3 Plus reporting all-clear status values.
+
+## [0.10.0] - 2026-11-16
+
+### Added
+
+- Added PV Input Power and PV Energy readings to Matter and legacy HomeKit/Eve.
+- Added cleanup for the earlier prototype PV characteristic.
 
 ### Live validation
 

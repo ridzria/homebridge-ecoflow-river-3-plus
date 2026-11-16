@@ -196,6 +196,16 @@ The serial number should normally begin with `R63`.
 
 Remove only the EcoFlow platform entry from `config.json`, keep a backup, and restart. Do not delete the entire Homebridge persist directory.
 
+## Unsupported devices and bug reports
+
+If your EcoFlow device is not listed as verified in the compatibility table, open an [unsupported-device issue](https://github.com/ridzria/homebridge-ecoflow-river-3-plus/issues/new?template=unsupported-device.yml) with the model, region, serial-number prefix only, firmware version, and a short description of what you tested. Never include your email address, password, access token, MQTT credentials, or full serial number.
+
+For a general bug, include the plugin version, Homebridge version, Node.js version, selected protocol, and relevant redacted log lines. Please search existing issues first.
+
+## Contributing
+
+Contributions and device captures are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. Changes should include tests where practical, pass `npm test`, `npm run build`, and `git diff --check`, and must not include credentials or private device data.
+
 ## Known limits
 
 - In legacy HomeKit mode, only the AC and 12 V outputs report watts through third-party characteristics. Input/output power sensors are Matter-only for now.
@@ -259,6 +269,10 @@ gh release create vX.Y.Z --title "vX.Y.Z" --notes-file /path/to/release-notes.md
 ```
 
 Release notes must contain real Markdown line breaks. Use `--notes-file` or shell `$'...'` quoting; do not pass escaped `\\n` text. npm publication is intentionally separate and requires explicit approval.
+
+### Release channels
+
+The `main` branch and normal semver tags are the stable release line. Stable versions use tags such as `v0.13.0` and are published to npm's default `latest` channel only after live validation. Alpha and beta versions are optional and should be published only when a change needs wider pre-release testing; they must use an explicit npm dist-tag and clearly state their limitations in the GitHub Release notes. Unverified device support and experimental protocol mappings stay out of stable releases.
 
 ## Credits and licence
 

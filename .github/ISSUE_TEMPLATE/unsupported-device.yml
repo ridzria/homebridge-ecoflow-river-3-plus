@@ -1,0 +1,49 @@
+name: Unsupported device request
+description: Report an EcoFlow model that is not yet verified by this plugin.
+title: "Unsupported device: "
+labels:
+  - device-support
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include passwords, tokens, MQTT credentials, email addresses, full serial numbers, or unredacted HAR/log files.
+
+  - type: input
+    id: model
+    attributes:
+      label: EcoFlow model
+      description: The model name shown in the EcoFlow app.
+    validations:
+      required: true
+
+  - type: input
+    id: serial_prefix
+    attributes:
+      label: Serial-number prefix
+      description: Provide only the first four characters, such as R651 or R653.
+    validations:
+      required: true
+
+  - type: input
+    id: region
+    attributes:
+      label: Region
+      placeholder: MY, EU, US, UK, etc.
+    validations:
+      required: true
+
+  - type: input
+    id: firmware
+    attributes:
+      label: Firmware version
+    validations:
+      required: false
+
+  - type: textarea
+    id: testing
+    attributes:
+      label: What did you test?
+      description: Include the plugin version, protocol, observed behavior, and redacted relevant log lines.
+    validations:
+      required: true

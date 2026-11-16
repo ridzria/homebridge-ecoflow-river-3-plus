@@ -88,3 +88,17 @@ For live-device work, use probe scripts with `api-s.ecoflow.com`, keep the EcoFl
 
 Prefer small, reviewable changes. New contributors should be able to add a sanitized telemetry fixture, map a verified field, add a HomeKit/Matter characteristic, or document tested device behavior without needing account credentials.
 
+## Release workflow
+
+After the user approves a feature and its live test passes:
+
+1. Update `package.json` using semantic versioning: patch for fixes, minor for compatible features, major for breaking changes.
+2. Update `CHANGELOG.md` and mark the roadmap item complete only when live validation is confirmed.
+3. Run `npm test`, `npm run build`, and `git diff --check`.
+4. Commit the complete implementation and documentation.
+5. Create the matching annotated tag, such as `v0.5.0`.
+6. Push the branch and tag to GitHub.
+7. Create the GitHub Release with Markdown notes matching the changelog.
+
+Use a quoted heredoc or a shell `$'...'` string for multiline `gh release create/edit --notes` content. Do not pass literal `\\n` sequences. Never publish to npm unless the user separately authorizes public package publication.
+

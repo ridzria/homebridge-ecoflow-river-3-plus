@@ -216,16 +216,25 @@ To regenerate the reference fixtures, see `scripts/make_reference_fixtures.py`.
 
 ### Publish a release
 
-Update the version in `package.json`, run the checks, then commit and push:
+After a feature has passed live-device validation, update the version in `package.json`, changelog, and roadmap, then run:
 
 ```bash
 npm test
 npm run build
 git diff --check
+```
+
+Then commit and publish the matching tag and GitHub Release:
+
+```bash
 git add .
 git commit -m "Release version X.Y.Z"
-git push origin main
+git tag -a vX.Y.Z -m "Release X.Y.Z"
+git push origin main vX.Y.Z
+gh release create vX.Y.Z --title "vX.Y.Z" --notes-file /path/to/release-notes.md
 ```
+
+Release notes must contain real Markdown line breaks. Use `--notes-file` or shell `$'...'` quoting; do not pass escaped `\\n` text. npm publication is intentionally separate and requires explicit approval.
 
 ## Credits and licence
 

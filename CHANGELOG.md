@@ -37,4 +37,4 @@ All notable changes to this project are documented here.
 ### Verification
 
 - Covered by the simulator and Homebridge platform tests.
-- Live-device verification is pending.
+- Live-tested in Apple Home at approximately 27°C.

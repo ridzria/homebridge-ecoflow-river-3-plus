@@ -8,7 +8,19 @@ All notable changes to this project are documented here.
 
 - Added a roadmap for verified EcoFlow telemetry and Homebridge/Matter features.
 - Added read-only custom HomeKit battery-health and cycle-count characteristics for compatible companion apps.
+- Added a HomeKit SOS Mode control for the RIVER 3 Plus light using the verified EcoFlow light-mode command.
 - Added read-only custom HomeKit charge/discharge remaining-time characteristics, reported in minutes when EcoFlow provides estimates.
+
+## [0.9.0] - 2026-11-16
+
+### Added
+
+- Added a dedicated HomeKit SOS Mode switch for Apple Home automations.
+- Preserved the Eve SOS Mode characteristic for companion-app control.
+
+### Live validation
+
+- Confirmed the SOS switch appears in Apple Home automation controls and activates the blinking SOS light.
 
 ## [0.8.0] - 2026-11-16
 

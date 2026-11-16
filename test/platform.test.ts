@@ -65,7 +65,7 @@ describe('platform with a simulated RIVER 3 Plus', () => {
 
     const found = services(accessory);
     assert.deepEqual(Object.keys(found).sort(), [
-      'AccessoryInformation', 'ac', 'battery', 'battery-temperature', 'dc', 'light', 'mains', 'xboost',
+      'AccessoryInformation', 'ac', 'battery', 'battery-temperature', 'dc', 'light', 'mains', 'sos', 'xboost',
     ]);
 
     const info = found.AccessoryInformation!;
@@ -144,6 +144,7 @@ describe('platform with a simulated RIVER 3 Plus', () => {
     const light = services(registered[0]!).light!;
     const on = light.getCharacteristic(Characteristic.On);
     const brightness = light.getCharacteristic(Characteristic.Brightness);
+    const sos = light.characteristics.find((c) => c.displayName === 'SOS Mode')!;
 
     await on.handleSetRequest(true);
     await wait(350);
@@ -154,6 +155,15 @@ describe('platform with a simulated RIVER 3 Plus', () => {
     await wait(350);
     assert.equal(on.value, true);
     assert.equal(brightness.value, 50);
+
+    await sos.handleSetRequest(true);
+    await wait(350);
+    assert.equal(sos.value, true);
+    assert.equal(brightness.value, 100);
+
+    await sos.handleSetRequest(false);
+    await wait(350);
+    assert.equal(sos.value, false);
 
     await on.handleSetRequest(false);
     await wait(350);

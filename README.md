@@ -80,13 +80,11 @@ Homebridge 1.8 or later and Node.js 20.18 or later. For watts in Apple Home you 
 ### Install from a terminal
 
 ```bash
-sudo npm install -g https://github.com/ridzria/homebridge-ecoflow-river-3-plus.git
+sudo npm install -g homebridge-ecoflow-river-3-plus
 sudo systemctl restart homebridge
 ```
 
-```bash
-npm install -g git+https://github.com/ridzria/homebridge-ecoflow-river-3-plus.git
-```
+The package is published on [npm](https://www.npmjs.com/package/homebridge-ecoflow-river-3-plus). Use the GitHub repository only when testing an unreleased branch.
 
 Then restart Homebridge and open the plugin's settings.
 
@@ -273,6 +271,10 @@ Release notes must contain real Markdown line breaks. Use `--notes-file` or shel
 ### Release channels
 
 The `main` branch and normal semver tags are the stable release line. Stable versions use tags such as `v0.13.0` and are published to npm's default `latest` channel only after live validation. Alpha and beta versions are optional and should be published only when a change needs wider pre-release testing; they must use an explicit npm dist-tag and clearly state their limitations in the GitHub Release notes. Unverified device support and experimental protocol mappings stay out of stable releases.
+
+### Homebridge verification
+
+This plugin is published on npm and maintained in a public GitHub repository with Issues enabled. Verification is a separate review by the Homebridge project; it is not implied by npm publication. See the [Homebridge verification requirements](https://github.com/homebridge/plugins/wiki/Verified-Plugins) and [request verification](https://github.com/homebridge/plugins/issues/new/choose) after a stable release has been tested on a clean Homebridge installation.
 
 ## Credits and licence
 

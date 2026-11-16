@@ -5,6 +5,7 @@ import type { Transport } from './transport.js';
 
 interface SimulatedUnit {
   soc: number;
+  temperatureC: number;
   acOn: boolean;
   dcOn: boolean;
   xboost: boolean;
@@ -38,7 +39,15 @@ export class SimulatorTransport extends EventEmitter implements Transport {
   }
 
   watch(serialNumber: string): void {
-    this.units.set(serialNumber, { soc: 76, acOn: true, dcOn: false, xboost: false, ledMode: 0, mains: true });
+    this.units.set(serialNumber, {
+      soc: 76,
+      temperatureC: 27,
+      acOn: true,
+      dcOn: false,
+      xboost: false,
+      ledMode: 0,
+      mains: true,
+    });
   }
 
   start(): void {
@@ -136,6 +145,8 @@ export class SimulatorTransport extends EventEmitter implements Transport {
     const fields: Record<string, unknown> = {
       cms_batt_soc: unit.soc,
       bms_batt_soc: unit.soc,
+      bms_min_cell_temp: unit.temperatureC,
+      bms_max_cell_temp: unit.temperatureC,
       cms_chg_dsg_state: charging ? 2 : unit.mains ? 0 : 1,
       pow_in_sum_w: unit.mains ? acLoad + dcLoad + (charging ? 100 : 0) : 0,
       pow_out_sum_w: acLoad + dcLoad,

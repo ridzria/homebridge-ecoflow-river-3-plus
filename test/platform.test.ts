@@ -64,7 +64,9 @@ describe('platform with a simulated RIVER 3 Plus', () => {
     assert.equal(accessory.UUID, api.hap.uuid.generate(`${PLUGIN_NAME}:${SN}`));
 
     const found = services(accessory);
-    assert.deepEqual(Object.keys(found).sort(), ['AccessoryInformation', 'ac', 'battery', 'dc', 'light', 'mains', 'xboost']);
+    assert.deepEqual(Object.keys(found).sort(), [
+      'AccessoryInformation', 'ac', 'battery', 'battery-temperature', 'dc', 'light', 'mains', 'xboost',
+    ]);
 
     const info = found.AccessoryInformation!;
     assert.equal(info.getCharacteristic(Characteristic.Manufacturer).value, 'EcoFlow');
@@ -73,6 +75,7 @@ describe('platform with a simulated RIVER 3 Plus', () => {
 
     // The simulator starts at 76%, charging on mains, AC on, 12 V off.
     assert.equal(found.battery!.getCharacteristic(Characteristic.BatteryLevel).value, 76);
+    assert.equal(found['battery-temperature']!.getCharacteristic(Characteristic.CurrentTemperature).value, 27);
     assert.equal(
       found.battery!.getCharacteristic(Characteristic.ChargingState).value,
       Characteristic.ChargingState.CHARGING,
@@ -97,6 +100,10 @@ describe('platform with a simulated RIVER 3 Plus', () => {
 
     // Reads go through the handlers too.
     assert.equal(await found.battery!.getCharacteristic(Characteristic.BatteryLevel).handleGetRequest(), 76);
+    assert.equal(
+      await found['battery-temperature']!.getCharacteristic(Characteristic.CurrentTemperature).handleGetRequest(),
+      27,
+    );
     assert.equal(await found.ac!.getCharacteristic(Characteristic.On).handleGetRequest(), true);
   });
 
@@ -185,7 +192,9 @@ describe('platform with a simulated RIVER 3 Plus', () => {
 
   it('leaves out the services that are switched off in the settings', () => {
     const { registered } = launch(simulated({ dcOutlet: false, light: false, mainsSensor: false }));
-    assert.deepEqual(Object.keys(services(registered[0]!)).sort(), ['AccessoryInformation', 'ac', 'battery']);
+    assert.deepEqual(Object.keys(services(registered[0]!)).sort(), [
+      'AccessoryInformation', 'ac', 'battery', 'battery-temperature',
+    ]);
   });
 
   it('has no light on a plain RIVER 3 unless asked for', () => {

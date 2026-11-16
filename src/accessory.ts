@@ -12,6 +12,7 @@ type ServiceType = WithUUID<typeof Service>;
 /** Presents one RIVER 3 unit to HomeKit. */
 export class River3Accessory {
   private readonly battery: Service;
+  private readonly batteryTemperature: Service;
   private readonly acOutlet?: Service;
   private readonly dcOutlet?: Service;
   private readonly xboost?: Service;
@@ -42,6 +43,11 @@ export class River3Accessory {
     this.battery
       .getCharacteristic(Characteristic.StatusLowBattery)
       .onGet(() => this.read(() => this.lowBattery()));
+
+    this.batteryTemperature = this.service(Service.TemperatureSensor, 'battery-temperature', 'Battery Temperature', true)!;
+    this.batteryTemperature
+      .getCharacteristic(Characteristic.CurrentTemperature)
+      .onGet(() => this.read(() => this.device.batteryTemperatureC ?? 0));
 
     this.acOutlet = this.service(Service.Outlet, 'ac', 'AC Outlets', config.acOutlet);
     if (this.acOutlet) {
@@ -210,6 +216,10 @@ export class River3Accessory {
     }
     this.battery.updateCharacteristic(Characteristic.ChargingState, this.chargingState());
     this.battery.updateCharacteristic(Characteristic.StatusLowBattery, this.lowBattery());
+    const temperature = this.device.batteryTemperatureC;
+    if (temperature !== undefined) {
+      this.batteryTemperature.updateCharacteristic(Characteristic.CurrentTemperature, temperature);
+    }
 
     if (this.acOutlet) {
       this.acOutlet.updateCharacteristic(Characteristic.On, this.device.isOn('acOutput'));

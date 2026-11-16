@@ -151,6 +151,20 @@ export class River3Device extends EventEmitter {
     return level === undefined ? undefined : Math.min(100, Math.max(0, Math.round(level)));
   }
 
+  /** Battery temperature in degrees Celsius, or undefined before the first report. */
+  get batteryTemperatureC(): number | undefined {
+    const direct = this.number('temp');
+    if (direct !== undefined) {
+      return direct;
+    }
+    const minimum = this.number('bms_min_cell_temp');
+    const maximum = this.number('bms_max_cell_temp');
+    if (minimum !== undefined && maximum !== undefined) {
+      return (minimum + maximum) / 2;
+    }
+    return maximum ?? minimum;
+  }
+
   get charging(): boolean {
     const state = this.number('cms_chg_dsg_state') ?? this.number('bms_chg_dsg_state');
     if (state !== undefined) {

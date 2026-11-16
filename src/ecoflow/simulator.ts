@@ -10,6 +10,7 @@ interface SimulatedUnit {
   dcOn: boolean;
   xboost: boolean;
   ledMode: number;
+  maxChargeSoc: number;
   mains: boolean;
 }
 
@@ -48,6 +49,7 @@ export class SimulatorTransport extends EventEmitter implements Transport {
       dcOn: false,
       xboost: false,
       ledMode: 0,
+      maxChargeSoc: 100,
       mains: true,
     });
   }
@@ -87,6 +89,9 @@ export class SimulatorTransport extends EventEmitter implements Transport {
     }
     if (typeof command.cfg_led_mode === 'number') {
       unit.ledMode = command.cfg_led_mode;
+    }
+    if (typeof command.cms_max_chg_soc === 'number') {
+      unit.maxChargeSoc = Math.min(100, Math.max(0, command.cms_max_chg_soc));
     }
     const reply = setTimeout(() => {
       const seq = generateSeq();
@@ -183,7 +188,7 @@ export class SimulatorTransport extends EventEmitter implements Transport {
     };
     if (full) {
       fields.bms_design_cap = 14000;
-      fields.cms_max_chg_soc = 100;
+      fields.cms_max_chg_soc = unit.maxChargeSoc;
       fields.cms_min_dsg_soc = 0;
     }
     this.emit(

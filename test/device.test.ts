@@ -277,6 +277,14 @@ describe('River 3 device', () => {
     assert.equal(device.ledMode, LED_MODE.bright);
   });
 
+  it('sets the maximum charge SOC', () => {
+    const { transport, device } = setup();
+    transport.goOnline();
+    transport.deliver(SN, 'data', display({ cms_max_chg_soc: 100 }));
+    device.set('maxChargeSoc', 80);
+    assert.deepEqual(decodeSetCommand(transport.sets[0]!.payload)?.command, { cms_max_chg_soc: 80 });
+  });
+
   it('survives a message it cannot decode', () => {
     const { transport, device } = setup();
     transport.goOnline();

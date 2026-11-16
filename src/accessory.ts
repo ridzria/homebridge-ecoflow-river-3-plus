@@ -19,6 +19,7 @@ const ALARM_STATE_UUID = 'C7A5B4D1-7C5E-4F7A-9E31-7E6B1B7A0009';
 const PROTECTION_STATE_UUID = 'C7A5B4D1-7C5E-4F7A-9E31-7E6B1B7A000A';
 const FAULT_STATE_UUID = 'C7A5B4D1-7C5E-4F7A-9E31-7E6B1B7A000B';
 const WATER_INGRESS_UUID = 'C7A5B4D1-7C5E-4F7A-9E31-7E6B1B7A000C';
+const MAX_CHARGE_SOC_UUID = 'C7A5B4D1-7C5E-4F7A-9E31-7E6B1B7A000D';
 
 type ServiceType = WithUUID<typeof Service>;
 
@@ -46,6 +47,7 @@ export class River3Accessory {
   private readonly protectionState?: Characteristic;
   private readonly faultState?: Characteristic;
   private readonly waterIngress?: Characteristic;
+  private readonly maxChargeSoc?: Characteristic;
 
   constructor(
     private readonly platform: River3Platform,
@@ -96,6 +98,9 @@ export class River3Accessory {
     this.faultState.onGet(() => this.read(() => this.device.faultState ?? 0));
     this.waterIngress = this.customBatteryCharacteristic('Water Ingress', WATER_INGRESS_UUID, 0, 1, 1, '', this.platform.api.hap.Formats.UINT8);
     this.waterIngress.onGet(() => this.read(() => this.device.waterIngress ? 1 : 0));
+    this.maxChargeSoc = this.customBatteryCharacteristic('Maximum Charge', MAX_CHARGE_SOC_UUID, 0, 100, 1, '%', this.platform.api.hap.Formats.UINT8, true);
+    this.maxChargeSoc.onGet(() => this.read(() => this.device.maxChargeSoc ?? 100));
+    this.maxChargeSoc.onSet((value) => this.write('maxChargeSoc', Math.max(0, Math.min(100, Math.round(Number(value))))));
 
     this.batteryTemperature = this.service(Service.TemperatureSensor, 'battery-temperature', 'Battery Temperature', true)!;
     this.batteryTemperature
@@ -221,8 +226,9 @@ export class River3Accessory {
     minStep: number,
     unit = name === 'Battery Health' ? '%' : 'cycles',
     format = this.platform.api.hap.Formats.UINT16,
+    writable = false,
   ): Characteristic {
-    const { Characteristic, Formats, Perms } = this.platform.api.hap;
+    const { Characteristic, Perms } = this.platform.api.hap;
     const existing = this.battery.characteristics.find((c) => c.UUID === uuid);
     if (existing) {
       return existing;
@@ -231,7 +237,7 @@ export class River3Accessory {
       new Characteristic(name, uuid, {
         format,
         unit,
-        perms: [Perms.PAIRED_READ, Perms.NOTIFY],
+        perms: [Perms.PAIRED_READ, ...(writable ? [Perms.PAIRED_WRITE] : []), Perms.NOTIFY],
         minValue,
         maxValue,
         minStep,
@@ -330,6 +336,10 @@ export class River3Accessory {
     const pvEnergy = this.device.pvInputEnergyWh;
     if (pvEnergy !== undefined) {
       this.pvEnergy?.updateValue(pvEnergy);
+    }
+    const maxChargeSoc = this.device.maxChargeSoc;
+    if (maxChargeSoc !== undefined) {
+      this.maxChargeSoc?.updateValue(maxChargeSoc);
     }
     this.errorCode?.updateValue(this.device.errorCode ?? 0);
     this.alarmState?.updateValue(this.device.alarmState ?? 0);

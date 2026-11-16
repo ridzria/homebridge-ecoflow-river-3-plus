@@ -19,7 +19,8 @@ export type SetField =
   | 'cfg_dc12v_out_open'
   | 'xboost_en'
   | 'cfg_led_mode'
-  | 'en_beep';
+  | 'en_beep'
+  | 'cms_max_chg_soc';
 
 export interface PacketInfo {
   src: number;

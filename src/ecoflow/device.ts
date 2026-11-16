@@ -33,6 +33,7 @@ export const CONTROLS = {
   dcOutput: { stateKey: 'cfg_dc12v_out_open', setField: 'cfg_dc12v_out_open' },
   xboost: { stateKey: 'xboost_en', setField: 'xboost_en' },
   ledMode: { stateKey: 'led_mode', setField: 'cfg_led_mode' },
+  maxChargeSoc: { stateKey: 'cms_max_chg_soc', setField: 'cms_max_chg_soc' },
 } as const satisfies Record<string, { stateKey: string; setField: SetField }>;
 
 export type ControlName = keyof typeof CONTROLS;
@@ -293,6 +294,12 @@ export class River3Device extends EventEmitter {
 
   get ledMode(): number {
     return this.number(CONTROLS.ledMode.stateKey) ?? LED_MODE.off;
+  }
+
+  /** Maximum battery charge percentage configured on the unit. */
+  get maxChargeSoc(): number | undefined {
+    const soc = this.number('cms_max_chg_soc');
+    return soc === undefined ? undefined : Math.min(100, Math.max(0, Math.round(soc)));
   }
 
   /** Send a change to the unit. Throws DeviceOfflineError if it cannot be reached. */

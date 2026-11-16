@@ -86,6 +86,7 @@ describe('platform with a simulated RIVER 3 Plus', () => {
     assert.equal(found.battery!.characteristics.find((c) => c.displayName === 'Protection State')?.value, 0);
     assert.equal(found.battery!.characteristics.find((c) => c.displayName === 'Fault State')?.value, 0);
     assert.equal(found.battery!.characteristics.find((c) => c.displayName === 'Water Ingress')?.value, 0);
+    assert.equal(found.battery!.characteristics.find((c) => c.displayName === 'Maximum Charge')?.value, 100);
     assert.equal(found['battery-temperature']!.getCharacteristic(Characteristic.CurrentTemperature).value, 27);
     assert.equal(
       found.battery!.getCharacteristic(Characteristic.ChargingState).value,

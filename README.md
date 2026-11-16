@@ -199,7 +199,7 @@ Features are implemented one at a time, in the order listed, from verified telem
 - [x] PV/solar input power (Matter and Eve/HomeKit)
 - [x] PV/solar energy totals (Matter and Eve/HomeKit when reported)
 - [x] Error, alarm, and protection sensors (read-only Eve/HomeKit status values)
-- [ ] Additional verified controls such as charge limits and timers
+- [ ] Additional verified controls such as charge limits and timers (Maximum Charge prototype ready for live validation)
 
 The RIVER 3 Plus light reports four verified modes: Off, Dim, Bright, and SOS. HomeKit exposes SOS as a separate read/write characteristic on the Light service; Matter continues to expose Off/Dim/Bright through its level control.
 

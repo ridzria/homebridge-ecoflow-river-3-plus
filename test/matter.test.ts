@@ -127,6 +127,7 @@ describe('Matter', () => {
     assert.equal(input.clusters?.electricalPowerMeasurement?.powerMode, 0);
     assert.equal(output.clusters?.electricalPowerMeasurement?.powerMode, 0);
     assert.equal(pv.clusters?.electricalPowerMeasurement?.powerMode, 1);
+    assert.ok('cumulativeEnergyImported' in (pv.clusters?.electricalEnergyMeasurement ?? {}));
     assert.equal(usbA.clusters?.electricalPowerMeasurement?.powerMode, 1);
     assert.equal(usbC.clusters?.electricalPowerMeasurement?.powerMode, 1);
     assert.equal(ac.clusters?.powerSource?.description, 'Battery');

@@ -100,6 +100,13 @@ describe('River 3 device', () => {
     assert.equal(device.dischargeRemainingMinutes, 2490);
   });
 
+  it('reads the PV energy total from cached status', () => {
+    const { transport, device } = setup();
+    transport.goOnline();
+    transport.deliver(SN, 'get_reply', quota(1, { pv_in_energy: 70 }));
+    assert.equal(device.pvInputEnergyWh, 70);
+  });
+
   it('ignores messages for other serial numbers', () => {
     const { transport, device } = setup();
     transport.goOnline();

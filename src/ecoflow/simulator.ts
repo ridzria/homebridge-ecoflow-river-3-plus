@@ -159,6 +159,7 @@ export class SimulatorTransport extends EventEmitter implements Transport {
       cms_chg_dsg_state: charging ? 2 : unit.mains ? 0 : 1,
       pow_in_sum_w: unit.mains ? acLoad + dcLoad + (charging ? 100 : 0) : 0,
       pow_get_pv: 0,
+      pv_in_energy: 0,
       pow_out_sum_w: acLoad + dcLoad,
       pow_get_ac_out: -acLoad,
       pow_get_12v: -dcLoad,

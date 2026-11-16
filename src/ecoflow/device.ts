@@ -54,6 +54,8 @@ const QUOTA_KEYS = new Set([
   'flow_info_ac_out', 'flow_info_12v', 'cfg_ac_out_open', 'dc_out_open', 'xboost_en', 'led_mode',
   'plug_in_info_ac_charger_flag', 'plug_in_info_ac_in_flag',
   'msg32_2_1_cms_chg_rem_time', 'msg32_2_1_cms_dsg_rem_time',
+  'pow_get_pv',
+  'pv_in_energy',
 ]);
 
 function normaliseQuotaKey(key: string): string {
@@ -215,6 +217,12 @@ export class River3Device extends EventEmitter {
   /** Solar/PV input power in watts. */
   get pvInputWatts(): number {
     return Math.max(0, Math.abs(this.number('pow_get_pv') ?? 0));
+  }
+
+  /** Lifetime solar/PV energy received, in watt-hours. */
+  get pvInputEnergyWh(): number | undefined {
+    const energy = this.number('pv_in_energy');
+    return energy === undefined ? undefined : Math.max(0, energy);
   }
 
   get outputWatts(): number {

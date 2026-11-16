@@ -197,6 +197,7 @@ export class River3MatterAccessory {
         break;
       case 'pv':
         state.electricalPowerMeasurement = this.power(this.device.pvInputWatts, 1, initial);
+        this.addEnergy(state, this.device.pvInputEnergyWh, initial);
         break;
       case 'usbA':
         state.electricalPowerMeasurement = this.power(this.device.usbAOutputWatts, 1, initial);

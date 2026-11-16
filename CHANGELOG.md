@@ -9,7 +9,7 @@ All notable changes to this project are documented here.
 - Added a roadmap for verified EcoFlow telemetry and Homebridge/Matter features.
 - Added read-only custom HomeKit battery-health and cycle-count characteristics for compatible companion apps.
 - Added read-only custom HomeKit charge/discharge remaining-time characteristics, reported in minutes when EcoFlow provides estimates.
-- Added a Matter PV Input Power electrical sensor using EcoFlow's `pow_get_pv` telemetry field; live validation is pending a non-zero solar reading.
+- Added PV Input Power and PV Energy readings for Matter and Eve/HomeKit using EcoFlow's verified `pow_get_pv` and `pv_in_energy` fields.
 
 ## [0.8.0] - 2026-11-16
 

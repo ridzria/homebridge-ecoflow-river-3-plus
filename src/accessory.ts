@@ -10,6 +10,9 @@ const BATTERY_HEALTH_UUID = 'C7A5B4D1-7C5E-4F7A-9E31-7E6B1B7A0001';
 const BATTERY_CYCLES_UUID = 'C7A5B4D1-7C5E-4F7A-9E31-7E6B1B7A0002';
 const CHARGE_REMAINING_UUID = 'C7A5B4D1-7C5E-4F7A-9E31-7E6B1B7A0003';
 const DISCHARGE_REMAINING_UUID = 'C7A5B4D1-7C5E-4F7A-9E31-7E6B1B7A0004';
+/** UUID used briefly by the PV prototype before switching to Eve's Consumption schema. */
+const LEGACY_PV_INPUT_POWER_UUID = 'C7A5B4D1-7C5E-4F7A-9E31-7E6B1B7A0005';
+const PV_ENERGY_UUID = 'C7A5B4D1-7C5E-4F7A-9E31-7E6B1B7A0007';
 
 type ServiceType = WithUUID<typeof Service>;
 
@@ -29,6 +32,7 @@ export class River3Accessory {
   private readonly chargeRemaining?: Characteristic;
   private readonly dischargeRemaining?: Characteristic;
   private readonly pvInputPower?: Characteristic;
+  private readonly pvEnergy?: Characteristic;
 
   constructor(
     private readonly platform: River3Platform,
@@ -52,6 +56,10 @@ export class River3Accessory {
     this.battery
       .getCharacteristic(Characteristic.StatusLowBattery)
       .onGet(() => this.read(() => this.lowBattery()));
+    const legacyPv = this.battery.characteristics.find((c) => c.UUID === LEGACY_PV_INPUT_POWER_UUID);
+    if (legacyPv) {
+      this.battery.removeCharacteristic(legacyPv);
+    }
     this.batteryHealth = this.customBatteryCharacteristic('Battery Health', BATTERY_HEALTH_UUID, 0, 100, 1);
     this.batteryHealth.onGet(() => this.read(() => this.device.batteryHealthPercent ?? 0));
     this.batteryCycles = this.customBatteryCharacteristic('Battery Cycles', BATTERY_CYCLES_UUID, 0, 100_000, 1);
@@ -63,6 +71,8 @@ export class River3Accessory {
     // Use Eve's known Consumption schema so legacy HomeKit controllers render a number.
     this.pvInputPower = this.customBatteryCharacteristic('PV Input Power', EVE_CONSUMPTION_UUID, 0, 3_000, 0.1, 'W', this.platform.api.hap.Formats.FLOAT);
     this.pvInputPower.onGet(() => this.read(() => this.device.pvInputWatts));
+    this.pvEnergy = this.customBatteryCharacteristic('PV Energy', PV_ENERGY_UUID, 0, 4_294_967_295, 1, 'Wh', this.platform.api.hap.Formats.UINT32);
+    this.pvEnergy.onGet(() => this.read(() => this.device.pvInputEnergyWh ?? 0));
 
     this.batteryTemperature = this.service(Service.TemperatureSensor, 'battery-temperature', 'Battery Temperature', true)!;
     this.batteryTemperature
@@ -279,6 +289,10 @@ export class River3Accessory {
       this.dischargeRemaining?.updateValue(dischargeRemaining);
     }
     this.pvInputPower?.updateValue(this.device.pvInputWatts);
+    const pvEnergy = this.device.pvInputEnergyWh;
+    if (pvEnergy !== undefined) {
+      this.pvEnergy?.updateValue(pvEnergy);
+    }
     const temperature = this.device.batteryTemperatureC;
     if (temperature !== undefined) {
       this.batteryTemperature.updateCharacteristic(Characteristic.CurrentTemperature, temperature);

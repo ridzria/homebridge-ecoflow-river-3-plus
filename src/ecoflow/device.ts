@@ -53,6 +53,7 @@ const QUOTA_KEYS = new Set([
   'pow_in_sum_w', 'pow_out_sum_w', 'pow_get_ac_out', 'pow_get_ac_in', 'pow_get_12v',
   'flow_info_ac_out', 'flow_info_12v', 'cfg_ac_out_open', 'dc_out_open', 'xboost_en', 'led_mode',
   'plug_in_info_ac_charger_flag', 'plug_in_info_ac_in_flag',
+  'msg32_2_1_cms_chg_rem_time', 'msg32_2_1_cms_dsg_rem_time',
 ]);
 
 function normaliseQuotaKey(key: string): string {
@@ -175,6 +176,22 @@ export class River3Device extends EventEmitter {
   get batteryCycles(): number | undefined {
     const cycles = this.number('cycles');
     return cycles === undefined ? undefined : Math.max(0, Math.round(cycles));
+  }
+
+  /** Estimated minutes until charging completes, or undefined when unavailable. */
+  get chargeRemainingMinutes(): number | undefined {
+    const minutes = this.number('cms_chg_rem_time')
+      ?? this.number('bms_chg_rem_time')
+      ?? this.number('msg32_2_1_cms_chg_rem_time');
+    return minutes === undefined ? undefined : Math.max(0, Math.round(minutes));
+  }
+
+  /** Estimated minutes until discharge reaches its configured limit, or undefined when unavailable. */
+  get dischargeRemainingMinutes(): number | undefined {
+    const minutes = this.number('cms_dsg_rem_time')
+      ?? this.number('bms_dsg_rem_time')
+      ?? this.number('msg32_2_1_cms_dsg_rem_time');
+    return minutes === undefined ? undefined : Math.max(0, Math.round(minutes));
   }
 
   get charging(): boolean {

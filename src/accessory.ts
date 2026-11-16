@@ -8,6 +8,8 @@ import { KNOWN_SERIAL_PREFIXES, type DeviceConfig } from './settings.js';
 const EVE_CONSUMPTION_UUID = 'E863F10D-079E-48FF-8F27-9C2605A29F52';
 const BATTERY_HEALTH_UUID = 'C7A5B4D1-7C5E-4F7A-9E31-7E6B1B7A0001';
 const BATTERY_CYCLES_UUID = 'C7A5B4D1-7C5E-4F7A-9E31-7E6B1B7A0002';
+const CHARGE_REMAINING_UUID = 'C7A5B4D1-7C5E-4F7A-9E31-7E6B1B7A0003';
+const DISCHARGE_REMAINING_UUID = 'C7A5B4D1-7C5E-4F7A-9E31-7E6B1B7A0004';
 
 type ServiceType = WithUUID<typeof Service>;
 
@@ -24,6 +26,8 @@ export class River3Accessory {
   private readonly dcWatts?: Characteristic;
   private readonly batteryHealth?: Characteristic;
   private readonly batteryCycles?: Characteristic;
+  private readonly chargeRemaining?: Characteristic;
+  private readonly dischargeRemaining?: Characteristic;
 
   constructor(
     private readonly platform: River3Platform,
@@ -51,6 +55,10 @@ export class River3Accessory {
     this.batteryHealth.onGet(() => this.read(() => this.device.batteryHealthPercent ?? 0));
     this.batteryCycles = this.customBatteryCharacteristic('Battery Cycles', BATTERY_CYCLES_UUID, 0, 100_000, 1);
     this.batteryCycles.onGet(() => this.read(() => this.device.batteryCycles ?? 0));
+    this.chargeRemaining = this.customBatteryCharacteristic('Charge Remaining', CHARGE_REMAINING_UUID, 0, 65_535, 1, 'min');
+    this.chargeRemaining.onGet(() => this.read(() => this.device.chargeRemainingMinutes ?? 0));
+    this.dischargeRemaining = this.customBatteryCharacteristic('Discharge Remaining', DISCHARGE_REMAINING_UUID, 0, 65_535, 1, 'min');
+    this.dischargeRemaining.onGet(() => this.read(() => this.device.dischargeRemainingMinutes ?? 0));
 
     this.batteryTemperature = this.service(Service.TemperatureSensor, 'battery-temperature', 'Battery Temperature', true)!;
     this.batteryTemperature
@@ -153,7 +161,7 @@ export class River3Accessory {
     );
   }
 
-  private customBatteryCharacteristic(name: string, uuid: string, minValue: number, maxValue: number, minStep: number): Characteristic {
+  private customBatteryCharacteristic(name: string, uuid: string, minValue: number, maxValue: number, minStep: number, unit = name === 'Battery Health' ? '%' : 'cycles'): Characteristic {
     const { Characteristic, Formats, Perms } = this.platform.api.hap;
     const existing = this.battery.characteristics.find((c) => c.UUID === uuid);
     if (existing) {
@@ -162,7 +170,7 @@ export class River3Accessory {
     return this.battery.addCharacteristic(
       new Characteristic(name, uuid, {
         format: Formats.UINT16,
-        unit: name === 'Battery Health' ? '%' : 'cycles',
+        unit,
         perms: [Perms.PAIRED_READ, Perms.NOTIFY],
         minValue,
         maxValue,
@@ -249,6 +257,14 @@ export class River3Accessory {
     const cycles = this.device.batteryCycles;
     if (cycles !== undefined) {
       this.batteryCycles?.updateValue(cycles);
+    }
+    const chargeRemaining = this.device.chargeRemainingMinutes;
+    if (chargeRemaining !== undefined) {
+      this.chargeRemaining?.updateValue(chargeRemaining);
+    }
+    const dischargeRemaining = this.device.dischargeRemainingMinutes;
+    if (dischargeRemaining !== undefined) {
+      this.dischargeRemaining?.updateValue(dischargeRemaining);
     }
     const temperature = this.device.batteryTemperatureC;
     if (temperature !== undefined) {

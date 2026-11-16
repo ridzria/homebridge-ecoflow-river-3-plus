@@ -152,6 +152,8 @@ export class SimulatorTransport extends EventEmitter implements Transport {
       cms_batt_soh: 100,
       soh: 1,
       cycles: 1,
+      cms_chg_rem_time: charging ? 60 : 0,
+      cms_dsg_rem_time: charging ? 0 : 120,
       bms_min_cell_temp: unit.temperatureC,
       bms_max_cell_temp: unit.temperatureC,
       cms_chg_dsg_state: charging ? 2 : unit.mains ? 0 : 1,

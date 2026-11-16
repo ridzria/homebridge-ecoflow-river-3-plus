@@ -88,6 +88,18 @@ describe('River 3 device', () => {
     assert.ok(updates.count >= 1);
   });
 
+  it('reads prefixed charge and discharge remaining times', () => {
+    const { transport, device } = setup();
+    transport.goOnline();
+    transport.deliver(SN, 'get_reply', quota(1, {
+      msg32_2_1_cms_chg_rem_time: 5939,
+      msg32_2_1_cms_dsg_rem_time: 2490,
+    }));
+
+    assert.equal(device.chargeRemainingMinutes, 5939);
+    assert.equal(device.dischargeRemainingMinutes, 2490);
+  });
+
   it('ignores messages for other serial numbers', () => {
     const { transport, device } = setup();
     transport.goOnline();

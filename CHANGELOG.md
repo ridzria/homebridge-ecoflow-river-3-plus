@@ -8,6 +8,17 @@ All notable changes to this project are documented here.
 
 - Added a roadmap for verified EcoFlow telemetry and Homebridge/Matter features.
 - Added read-only custom HomeKit battery-health and cycle-count characteristics for compatible companion apps.
+- Added read-only custom HomeKit charge/discharge remaining-time characteristics, reported in minutes when EcoFlow provides estimates.
+
+## [0.8.0] - 2026-11-16
+
+### Added
+
+- Added charge and discharge remaining-time characteristics in minutes.
+
+### Live validation
+
+- Confirmed in Eve using live RIVER 3 Plus telemetry, including a discharge estimate of approximately 2,499 minutes.
 
 ## [0.7.0] - 2026-11-16
 

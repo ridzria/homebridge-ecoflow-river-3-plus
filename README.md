@@ -195,7 +195,7 @@ Features are implemented one at a time, in the order listed, from verified telem
 - [x] AC output power in legacy HomeKit mode (Eve/Controller `Consumption`)
 - [x] 12 V DC output power in legacy HomeKit mode (Eve/Controller `Consumption`)
 - [x] Battery health and cycle count (custom HomeKit characteristics for compatible apps)
-- [ ] Charge/discharge remaining time
+- [x] Charge/discharge remaining time (custom HomeKit characteristics in minutes)
 - [ ] PV/solar input power and energy totals
 - [ ] Error, alarm, and protection sensors
 - [ ] Additional verified controls such as charge limits and timers

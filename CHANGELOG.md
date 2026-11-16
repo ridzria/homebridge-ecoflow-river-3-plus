@@ -8,6 +8,16 @@ All notable changes to this project are documented here.
 
 - Added a roadmap for verified EcoFlow telemetry and Homebridge/Matter features.
 
+## [0.6.0] - 2026-11-16
+
+### Added
+
+- Documented and regression-tested AC and 12V output power in legacy HomeKit mode through the Eve/Controller `Consumption` characteristic.
+
+### Live validation
+
+- Confirmed legacy HomeKit accessories and watt readings in the HomeKit test setup.
+
 ## [0.5.0] - 2026-11-16
 
 ### Added

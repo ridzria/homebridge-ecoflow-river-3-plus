@@ -192,8 +192,8 @@ Features are implemented one at a time, in the order listed, from verified telem
 - [x] Battery temperature sensor (HomeKit and Matter)
 - [x] Total input/output power sensors (Matter)
 - [x] USB-A and USB-C power sensors (Matter)
-- [ ] AC output power in legacy HomeKit mode
-- [ ] 12 V DC output power in legacy HomeKit mode
+- [x] AC output power in legacy HomeKit mode (Eve/Controller `Consumption`)
+- [x] 12 V DC output power in legacy HomeKit mode (Eve/Controller `Consumption`)
 - [ ] Battery health and cycle count
 - [ ] Charge/discharge remaining time
 - [ ] PV/solar input power and energy totals

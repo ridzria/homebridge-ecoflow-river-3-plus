@@ -107,6 +107,13 @@ describe('platform with a simulated RIVER 3 Plus', () => {
     assert.equal(await found.ac!.getCharacteristic(Characteristic.On).handleGetRequest(), true);
   });
 
+  it('exposes AC and 12 V watts through the legacy HomeKit Consumption characteristic', () => {
+    const { registered } = launch({ protocol: 'homekit', ...simulated() });
+    const found = services(registered[0]!);
+    assert.equal(found.ac!.characteristics.find((c) => c.UUID === EVE_CONSUMPTION_UUID)?.value, 58);
+    assert.equal(found.dc!.characteristics.find((c) => c.UUID === EVE_CONSUMPTION_UUID)?.value, 0);
+  });
+
   it('switches the AC and 12 V outputs from HomeKit and follows the unit\'s confirmation', async () => {
     const { api, registered } = launch(simulated());
     const { Characteristic } = api.hap;

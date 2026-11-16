@@ -106,3 +106,13 @@ Use a quoted heredoc or a shell `$'...'` string for multiline `gh release create
 
 Implement roadmap items in the listed order. A deviation is allowed only for a dependency, compatibility issue, or bug fix that materially improves correctness. When deviating, record the reason in the plan and update the roadmap order in the same change. Do not silently skip ahead.
 
+## Three-person collaboration
+
+Work may use three complementary roles:
+
+- **User:** performs live EcoFlow, HomeKit, and Matter tests; approves behavior and consequential releases.
+- **Primary agent:** owns implementation, integration, documentation, verification, commits, tags, and GitHub Releases after approval.
+- **Sub-agent:** performs independent telemetry research, compatibility investigation, test review, or code review.
+
+Sub-agents may investigate or review roadmap items in parallel, but only one roadmap feature is delivered and live-validated at a time. Sub-agents must not publish releases, expose credentials, control the device, or expand scope without explicit authorization.
+

@@ -1,8 +1,28 @@
 # homebridge-ecoflow-river-3-plus
 
+[![npm version](https://img.shields.io/npm/v/homebridge-ecoflow-river-3-plus.svg?label=npm%20version)](https://www.npmjs.com/package/homebridge-ecoflow-river-3-plus)
+[![npm downloads](https://img.shields.io/npm/dm/homebridge-ecoflow-river-3-plus.svg?label=npm%20downloads)](https://www.npmjs.com/package/homebridge-ecoflow-river-3-plus)
+[![Build](https://github.com/ridzria/homebridge-ecoflow-river-3-plus/actions/workflows/ci.yml/badge.svg)](https://github.com/ridzria/homebridge-ecoflow-river-3-plus/actions/workflows/ci.yml)
+[![License](https://img.shields.io/github/license/ridzria/homebridge-ecoflow-river-3-plus.svg)](https://github.com/ridzria/homebridge-ecoflow-river-3-plus/blob/main/LICENSE)
+
 A [Homebridge](https://homebridge.io) plugin that adds the **EcoFlow RIVER 3 Plus** portable power station to Apple Home.
 
 > **Status: tested against a real RIVER 3 Plus.** Live telemetry was verified through EcoFlow's app MQTT service at `api-s.ecoflow.com` / `mqtt-s.ecoflow.com` with the app closed.
+
+## Product-family compatibility
+
+The EcoFlow app's `getAllRealSnList` response provides a useful product catalog. It identifies product names, regional variants, product types, and serial-number prefixes, but it does **not** guarantee that models share the same telemetry or control protocol.
+
+| Family or variant | Catalog serial prefix | Plugin status |
+|---|---:|---|
+| RIVER 3 Plus | `R631` | Verified live |
+| RIVER 3 Plus 270 | `R634` | Verified live |
+| RIVER 3 Plus Wireless | `R635` | Catalog-listed; protocol compatibility not separately live-validated |
+| RIVER 3 / 245 Wh variants | `R651`, `R653` | Possible future support; not live-validated |
+| RIVER 3 / UPS variants | `R654`, `R655` | Possible future support; not live-validated |
+| RIVER 3 Plus extra batteries | `R632`, `R633` | Battery accessory entries; separate support not validated |
+
+The plugin currently targets the verified RIVER 3 Plus protocol. Other catalog entries remain possible support targets until a real device provides matching telemetry and its controls pass live validation. Regional names and catalog membership alone are not sufficient to mark a model as supported.
 
 ## What you get in Apple Home
 
@@ -200,7 +220,7 @@ Features are implemented one at a time, in the order listed, from verified telem
 - [x] PV/solar energy totals (Matter and Eve/HomeKit when reported)
 - [x] Error, alarm, and protection sensors (read-only Eve/HomeKit status values)
 - [x] Maximum Charge control (HomeKit/Eve)
-- [ ] Additional verified controls such as timers
+- [ ] Timer controls (device, AC outlet, and LCD screen) — deferred pending reliable field mapping
 
 The RIVER 3 Plus light reports four verified modes: Off, Dim, Bright, and SOS. HomeKit exposes SOS as a separate read/write characteristic on the Light service; Matter continues to expose Off/Dim/Bright through its level control.
 

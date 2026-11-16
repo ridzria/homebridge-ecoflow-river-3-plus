@@ -196,11 +196,16 @@ Features are implemented one at a time, in the order listed, from verified telem
 - [x] 12 V DC output power in legacy HomeKit mode (Eve/Controller `Consumption`)
 - [x] Battery health and cycle count (custom HomeKit characteristics for compatible apps)
 - [x] Charge/discharge remaining time (custom HomeKit characteristics in minutes)
-- [ ] PV/solar input power and energy totals
+- [ ] PV/solar input power (prototype preserved on `feature/pv-input-power`; live validation pending)
+- [ ] PV/solar energy totals (awaiting a verified EcoFlow PV-energy statistic)
 - [ ] Error, alarm, and protection sensors
 - [ ] Additional verified controls such as charge limits and timers
 
 ## Development
+
+### Feature branches
+
+Experimental work that is not yet live-validated stays on a feature branch. The PV input-power prototype is currently preserved on `feature/pv-input-power`; `main` remains the latest released baseline until the feature is validated and approved.
 
 ```bash
 npm install

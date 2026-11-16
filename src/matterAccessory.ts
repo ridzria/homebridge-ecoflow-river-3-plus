@@ -7,7 +7,7 @@ type MatterAPI = NonNullable<API['matter']>;
 type ClusterState = Record<string, unknown>;
 
 /** The separate devices one RIVER 3 becomes in Matter. */
-export type MatterKind = 'ac' | 'dc' | 'input' | 'output' | 'light' | 'mains' | 'xboost';
+export type MatterKind = 'ac' | 'dc' | 'input' | 'output' | 'usbA' | 'usbC' | 'light' | 'mains' | 'xboost';
 
 /** Matter enum values, written out so the plugin does not depend on matter.js at load time. */
 const POWER_MODE = { dc: 1, ac: 2 } as const;
@@ -57,7 +57,7 @@ export class River3MatterAccessory {
     if (config.dcOutlet) {
       kinds.push('dc');
     }
-    kinds.push('input', 'output');
+    kinds.push('input', 'output', 'usbA', 'usbC');
     if (config.light) {
       kinds.push('light');
     }
@@ -78,6 +78,8 @@ export class River3MatterAccessory {
       dc: '12V Outlet',
       input: 'Input Power',
       output: 'Output Power',
+      usbA: 'USB-A Power',
+      usbC: 'USB-C Power',
       light: 'Light',
       mains: 'Mains Power',
       xboost: 'X-Boost',
@@ -92,7 +94,7 @@ export class River3MatterAccessory {
             ? deviceTypes.DimmableLight
             : kind === 'mains'
               ? deviceTypes.ContactSensor
-              : kind === 'input' || kind === 'output'
+              : kind === 'input' || kind === 'output' || kind === 'usbA' || kind === 'usbC'
                 ? (deviceTypes as Record<string, unknown>).ElectricalSensor as typeof deviceTypes.OnOffOutlet
                 : deviceTypes.OnOffOutlet,
         manufacturer: 'EcoFlow',
@@ -191,6 +193,12 @@ export class River3MatterAccessory {
         break;
       case 'output':
         state.electricalPowerMeasurement = this.power(this.device.outputWatts, 0, initial);
+        break;
+      case 'usbA':
+        state.electricalPowerMeasurement = this.power(this.device.usbAOutputWatts, 1, initial);
+        break;
+      case 'usbC':
+        state.electricalPowerMeasurement = this.power(this.device.usbCOutputWatts, 1, initial);
         break;
       case 'xboost':
         state.onOff = { onOff: this.device.isOn('xboost') };

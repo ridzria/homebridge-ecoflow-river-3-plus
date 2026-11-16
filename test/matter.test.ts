@@ -94,6 +94,8 @@ describe('Matter', () => {
         ['River 12V Outlet', 'outlet'],
         ['River Input Power', 'electrical-sensor'],
         ['River Output Power', 'electrical-sensor'],
+        ['River USB-A Power', 'electrical-sensor'],
+        ['River USB-C Power', 'electrical-sensor'],
         ['River Light', 'light'],
         ['River Mains Power', 'contact'],
       ],
@@ -102,16 +104,16 @@ describe('Matter', () => {
     assert.equal(ac.UUID, matterUuid(api, SN, 'ac'));
     assert.equal(ac.manufacturer, 'EcoFlow');
     assert.equal(ac.model, 'RIVER 3 Plus');
-    assert.equal(new Set(fake.registered.map((a) => a.UUID)).size, 6);
-    assert.equal(new Set(fake.registered.map((a) => a.serialNumber)).size, 6);
+    assert.equal(new Set(fake.registered.map((a) => a.UUID)).size, 8);
+    assert.equal(new Set(fake.registered.map((a) => a.serialNumber)).size, 8);
   });
 
   it('declares power, energy and the battery so Homebridge composes the right Matter features', async () => {
     const fake = fakeMatter();
     const { platform } = launch(devices(), { matter: fake });
     await platform.matterReady;
-    const [ac, dc, input, output, light, mains] = fake.registered as [
-      MatterAccessory, MatterAccessory, MatterAccessory, MatterAccessory, MatterAccessory, MatterAccessory,
+    const [ac, dc, input, output, usbA, usbC, light, mains] = fake.registered as [
+      MatterAccessory, MatterAccessory, MatterAccessory, MatterAccessory, MatterAccessory, MatterAccessory, MatterAccessory, MatterAccessory,
     ];
 
     assert.equal(ac.clusters?.electricalPowerMeasurement?.powerMode, 2);
@@ -123,6 +125,8 @@ describe('Matter', () => {
     assert.equal(dc.clusters?.powerSource, undefined);
     assert.equal(input.clusters?.electricalPowerMeasurement?.powerMode, 0);
     assert.equal(output.clusters?.electricalPowerMeasurement?.powerMode, 0);
+    assert.equal(usbA.clusters?.electricalPowerMeasurement?.powerMode, 1);
+    assert.equal(usbC.clusters?.electricalPowerMeasurement?.powerMode, 1);
     assert.equal(ac.clusters?.powerSource?.description, 'Battery');
     assert.equal(ac.clusters?.powerSource?.batFunctionalWhileCharging, true);
     assert.deepEqual(light.clusters?.levelControl, { currentLevel: 254, minLevel: 1, maxLevel: 254 });
@@ -143,6 +147,8 @@ describe('Matter', () => {
     assert.deepEqual(fake.latest(matterUuid(api, SN, 'dc'), 'electricalPowerMeasurement'), { activePower: 0 });
     assert.deepEqual(fake.latest(matterUuid(api, SN, 'input'), 'electricalPowerMeasurement'), { activePower: 158_000 });
     assert.deepEqual(fake.latest(matterUuid(api, SN, 'output'), 'electricalPowerMeasurement'), { activePower: 58_000 });
+    assert.deepEqual(fake.latest(matterUuid(api, SN, 'usbA'), 'electricalPowerMeasurement'), { activePower: 0 });
+    assert.deepEqual(fake.latest(matterUuid(api, SN, 'usbC'), 'electricalPowerMeasurement'), { activePower: 0 });
     assert.deepEqual(fake.latest(matterUuid(api, SN, 'mains'), 'booleanState'), { stateValue: true });
   });
 
@@ -167,7 +173,7 @@ describe('Matter', () => {
     const fake = fakeMatter();
     const { api, platform } = launch(devices(), { matter: fake });
     await platform.matterReady;
-    const light = fake.registered[4]!;
+    const light = fake.registered[6]!;
     const uuid = matterUuid(api, SN, 'light');
 
     await light.handlers!.onOff!.on!(undefined);
@@ -211,10 +217,10 @@ describe('Matter', () => {
     await platform.matterReady;
     assert.deepEqual(
       fake.registered.map((a) => a.displayName),
-      ['River 12V Outlet', 'River Input Power', 'River Output Power', 'River Light', 'River Mains Power', 'River X-Boost'],
+      ['River 12V Outlet', 'River Input Power', 'River Output Power', 'River USB-A Power', 'River USB-C Power', 'River Light', 'River Mains Power', 'River X-Boost'],
     );
     assert.ok(fake.registered[0]!.clusters?.powerSource);
-    assert.equal(fake.registered[5]!.clusters?.electricalPowerMeasurement, undefined);
+    assert.equal(fake.registered[7]!.clusters?.electricalPowerMeasurement, undefined);
   });
 
   it('removes remembered HomeKit accessories when it moves to Matter', async () => {
@@ -225,7 +231,7 @@ describe('Matter', () => {
     const { platform, hapUnregistered } = launch(devices(), { matter: fake, cachedHap: before.hapRegistered });
     await platform.matterReady;
     assert.deepEqual(hapUnregistered, before.hapRegistered);
-    assert.equal(fake.registered.length, 6);
+    assert.equal(fake.registered.length, 8);
   });
 
   it('stays on HomeKit when told to, and removes remembered Matter devices', async () => {
@@ -256,7 +262,7 @@ describe('Matter', () => {
       fake.unregistered.map((a) => a.displayName),
       ['River X-Boost'],
     );
-    assert.equal(fake.registered.length, 6);
+    assert.equal(fake.registered.length, 8);
   });
 
   it('falls back to HomeKit, with a warning, when Matter is asked for but unavailable', () => {

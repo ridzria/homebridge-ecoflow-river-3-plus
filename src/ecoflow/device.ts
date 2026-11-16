@@ -195,6 +195,14 @@ export class River3Device extends EventEmitter {
     return Math.abs(this.number('pow_get_12v') ?? 0);
   }
 
+  get usbAOutputWatts(): number {
+    return Math.abs(this.number('pow_get_qcusb1') ?? 0) + Math.abs(this.number('pow_get_qcusb2') ?? 0);
+  }
+
+  get usbCOutputWatts(): number {
+    return Math.abs(this.number('pow_get_typec1') ?? 0) + Math.abs(this.number('pow_get_typec2') ?? 0);
+  }
+
   /** Lifetime energy delivered by the AC outlets, in watt-hours, if the unit has reported it. */
   get acOutputEnergyWh(): number | undefined {
     return this.number('ac_out_energy');

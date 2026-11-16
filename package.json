@@ -18,7 +18,9 @@
     "river 3",
     "river 3 plus",
     "homekit",
-    "matter"
+    "matter",
+    "supports-hap",
+    "supports-matter"
   ],
   "engines": {
     "node": "^20.18.0 || ^22.12.0 || ^24 || ^26",

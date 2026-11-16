@@ -1,8 +1,8 @@
 {
-  "pluginAlias": "EcoFlowRiver3",
+  "pluginAlias": "EcoFlowRiver3Plus",
   "pluginType": "platform",
   "singular": true,
-  "headerDisplay": "Adds the EcoFlow RIVER 3 and RIVER 3 Plus to Apple Home. It signs in to EcoFlow's cloud with your EcoFlow app account.",
+  "headerDisplay": "Adds the EcoFlow RIVER 3 Plus to Apple Home. It signs in to EcoFlow's cloud with your EcoFlow app account.",
   "footerDisplay": "Your password is stored in Homebridge's config.json, like any other plugin setting.",
   "schema": {
     "type": "object",
@@ -10,7 +10,7 @@
       "name": {
         "title": "Name",
         "type": "string",
-        "default": "EcoFlow RIVER 3",
+        "default": "EcoFlow RIVER 3 Plus",
         "required": true
       },
       "email": {
@@ -26,7 +26,7 @@
         "title": "EcoFlow region",
         "description": "EcoFlow keeps accounts in separate regions. If sign-in is refused with a correct password, try the other one.",
         "type": "string",
-        "default": "api.ecoflow.com",
+        "default": "api-s.ecoflow.com",
         "oneOf": [
           {
             "title": "Global and US (api.ecoflow.com)",

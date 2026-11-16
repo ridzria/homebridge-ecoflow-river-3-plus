@@ -1,8 +1,8 @@
 {
-  "name": "homebridge-ecoflow-river3",
-  "displayName": "EcoFlow RIVER 3",
+  "name": "homebridge-ecoflow-river-3-plus",
+  "displayName": "EcoFlow RIVER 3 Plus",
   "version": "0.2.0",
-  "description": "Homebridge plugin that adds the EcoFlow RIVER 3 and RIVER 3 Plus power stations to Apple Home",
+  "description": "Homebridge plugin that adds the EcoFlow RIVER 3 Plus power station to Apple Home",
   "license": "Apache-2.0",
   "main": "dist/index.js",
   "files": [
@@ -44,10 +44,10 @@
   "exports": "./dist/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/richorridge/homebridge-ecoflow-river3.git"
+    "url": "git+https://github.com/ridzria/homebridge-ecoflow-river-3-plus.git"
   },
   "bugs": {
-    "url": "https://github.com/richorridge/homebridge-ecoflow-river3/issues"
+    "url": "https://github.com/ridzria/homebridge-ecoflow-river-3-plus/issues"
   },
-  "homepage": "https://github.com/richorridge/homebridge-ecoflow-river3#readme"
+  "homepage": "https://github.com/ridzria/homebridge-ecoflow-river-3-plus#readme"
 }

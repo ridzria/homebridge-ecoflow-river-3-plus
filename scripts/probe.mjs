@@ -27,7 +27,7 @@ const log = {
 };
 
 const transport = new CloudTransport(
-  { email, password, apiHost: process.env.ECOFLOW_HOST ?? 'api.ecoflow.com' },
+  { email, password, apiHost: process.env.ECOFLOW_HOST ?? 'api-s.ecoflow.com' },
   log,
 );
 const device = new River3Device(serial.trim().toUpperCase(), transport, log);

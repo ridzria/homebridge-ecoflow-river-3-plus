@@ -1,17 +1,13 @@
-export const PLATFORM_NAME = 'EcoFlowRiver3';
-export const PLUGIN_NAME = 'homebridge-ecoflow-river3';
+export const PLATFORM_NAME = 'EcoFlowRiver3Plus';
+export const PLUGIN_NAME = 'homebridge-ecoflow-river-3-plus';
 
-export const DEFAULT_API_HOST = 'api.ecoflow.com';
+export const DEFAULT_API_HOST = 'api-s.ecoflow.com';
 
 /** Serial number prefixes of the units this plugin understands. */
 export const KNOWN_SERIAL_PREFIXES: Record<string, string> = {
   R631: 'RIVER 3 Plus',
   R634: 'RIVER 3 Plus (270)',
   R635: 'RIVER 3 Plus Wireless',
-  R651: 'RIVER 3',
-  R653: 'RIVER 3',
-  R654: 'RIVER 3',
-  R655: 'RIVER 3',
 };
 
 /** How the unit is presented: "auto" uses Matter when the bridge has it switched on, HomeKit otherwise. */
@@ -46,7 +42,7 @@ export function readDeviceConfig(raw: unknown): DeviceConfig | undefined {
   const threshold = Number(entry.lowBatteryThreshold);
   const plus = serialNumber.startsWith('R63');
   return {
-    name: typeof entry.name === 'string' && entry.name.trim() ? entry.name.trim() : 'RIVER 3',
+    name: typeof entry.name === 'string' && entry.name.trim() ? entry.name.trim() : 'RIVER 3 Plus',
     serialNumber,
     acOutlet: flag('acOutlet', true),
     dcOutlet: flag('dcOutlet', true),

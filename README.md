@@ -1,8 +1,8 @@
-# homebridge-ecoflow-river3
+# homebridge-ecoflow-river-3-plus
 
-A [Homebridge](https://homebridge.io) plugin that adds the **EcoFlow RIVER 3** and **RIVER 3 Plus** portable power stations to Apple Home.
+A [Homebridge](https://homebridge.io) plugin that adds the **EcoFlow RIVER 3 Plus** portable power station to Apple Home.
 
-> **Status: not yet tested on a real unit.** The plugin was written before its author's RIVER 3 Plus arrived. The protocol code is checked byte for byte against the [hassio-ecoflow-cloud](https://github.com/tolwi/hassio-ecoflow-cloud) Home Assistant integration, which does support these units, and the sign-in code has been checked against EcoFlow's live servers. Nothing has yet been confirmed against real hardware. Expect rough edges, and please report what you find.
+> **Status: tested against a real RIVER 3 Plus.** Live telemetry was verified through EcoFlow's app MQTT service at `api-s.ecoflow.com` / `mqtt-s.ecoflow.com` with the app closed.
 
 ## What you get in Apple Home
 
@@ -47,7 +47,7 @@ EcoFlow has not added the RIVER 3 family to its official developer API, so this 
 Homebridge 1.8 or later and Node.js 20.18 or later. For watts in Apple Home you need Homebridge 2.3 or later.
 
 ```bash
-npm install -g git+https://github.com/richorridge/homebridge-ecoflow-river3.git
+npm install -g git+https://github.com/ridzria/homebridge-ecoflow-river-3-plus.git
 ```
 
 Then restart Homebridge and open the plugin's settings.
@@ -58,8 +58,8 @@ Use the settings form in the Homebridge UI, or add this to the `platforms` list 
 
 ```json
 {
-  "platform": "EcoFlowRiver3",
-  "name": "EcoFlow RIVER 3",
+  "platform": "EcoFlowRiver3Plus",
+  "name": "EcoFlow RIVER 3 Plus",
   "email": "you@example.com",
   "password": "your EcoFlow app password",
   "apiHost": "api-s.ecoflow.com",
@@ -75,10 +75,10 @@ Use the settings form in the Homebridge UI, or add this to the `platforms` list 
 | Setting | Meaning | Default |
 |---|---|---|
 | `email`, `password` | Your EcoFlow app account | none |
-| `apiHost` | EcoFlow service host: `api-s.ecoflow.com` (EcoFlow app service; required for some RIVER 3 Plus accounts), `api.ecoflow.com` (global and US), `api-e.ecoflow.com` (Europe) or `api-a.ecoflow.com` (Americas) | `api.ecoflow.com` |
+| `apiHost` | EcoFlow app service host for this plugin | `api-s.ecoflow.com` |
 | `protocol` | `auto`, `matter` or `homekit`. See "Watts in Apple Home" above | `auto` |
 | `simulate` | Show a pretend RIVER 3 Plus without signing in | `false` |
-| `devices[].name` | Name shown in Home | `RIVER 3` |
+| `devices[].name` | Name shown in Home | `RIVER 3 Plus` |
 | `devices[].serialNumber` | On the label under the unit and in the EcoFlow app | none |
 | `devices[].acOutlet` | Show the AC outlets | `true` |
 | `devices[].dcOutlet` | Show the 12 V outlet | `true` |
